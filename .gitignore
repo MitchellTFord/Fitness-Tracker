@@ -84,3 +84,4 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 .idea/codeStyles/Project.xml
+AndroidStudioProject/.idea/codeStyles/codeStyleConfig.xml
