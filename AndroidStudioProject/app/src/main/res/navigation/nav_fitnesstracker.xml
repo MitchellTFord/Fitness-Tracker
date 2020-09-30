@@ -10,4 +10,23 @@
         android:name="com.fitnesstracker.ui.DiaryFragment"
         android:label="fragment_diary"
         tools:layout="@layout/fragment_diary" />
+    <fragment
+        android:id="@+id/exerciseFragment"
+        android:name="com.fitnesstracker.ui.ExerciseFragment"
+        android:label="fragment_exercise"
+        tools:layout="@layout/fragment_exercise" />
+    <fragment
+        android:id="@+id/foodFragment"
+        android:name="com.fitnesstracker.ui.FoodFragment"
+        android:label="fragment_food"
+        tools:layout="@layout/fragment_food">
+        <action
+            android:id="@+id/action_foodFragment_to_addFoodFragment"
+            app:destination="@id/addFoodFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFoodFragment"
+        android:name="com.fitnesstracker.ui.AddFoodFragment"
+        android:label="fragment_add_food"
+        tools:layout="@layout/fragment_add_food" />
 </navigation>

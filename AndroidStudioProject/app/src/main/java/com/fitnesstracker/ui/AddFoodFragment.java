@@ -11,12 +11,12 @@ import com.fitnesstracker.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FoodFragment#newInstance} factory method to
+ * Use the {@link AddFoodFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FoodFragment extends Fragment {
+public class AddFoodFragment extends Fragment {
 
-	public FoodFragment() {
+	public AddFoodFragment() {
 		// Required empty public constructor
 	}
 
@@ -24,11 +24,11 @@ public class FoodFragment extends Fragment {
 	 * Use this factory method to create a new instance of
 	 * this fragment using the provided parameters.
 	 *
-	 * @return A new instance of fragment FoodFragment.
+	 * @return A new instance of fragment AddFoodFragment.
 	 */
 	// TODO: Rename and change types and number of parameters
-	public static FoodFragment newInstance() {
-		FoodFragment fragment = new FoodFragment();
+	public static AddFoodFragment newInstance() {
+		AddFoodFragment fragment = new AddFoodFragment();
 		return fragment;
 	}
 
@@ -41,7 +41,6 @@ public class FoodFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_food, container, false);
+		return inflater.inflate(R.layout.fragment_add_food, container, false);
 	}
-
 }

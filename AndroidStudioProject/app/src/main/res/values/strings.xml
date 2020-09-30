@@ -4,6 +4,8 @@
     <string name="title_diary">Diary</string>
     <string name="title_food">Food</string>
     <string name="title_exercise">Exercise</string>
+    <string name="new_food_button">New Food</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
