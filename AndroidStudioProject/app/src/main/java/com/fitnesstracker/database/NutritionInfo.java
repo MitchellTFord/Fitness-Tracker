@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * Class representing the nutrition facts of a serving of food or a combination thereof.
  *
@@ -218,5 +220,27 @@ public class NutritionInfo {
 		this.calcium *= scalar;
 		this.iron *= scalar;
 		this.potassium *= scalar;
+	}
+
+	@Override public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		NutritionInfo that = (NutritionInfo) o;
+		return calories == that.calories &&
+				fatCalories == that.fatCalories &&
+				totalFat == that.totalFat &&
+				saturatedFat == that.saturatedFat &&
+				transFat == that.transFat &&
+				cholesterol == that.cholesterol &&
+				sodium == that.sodium &&
+				totalCarbs == that.totalCarbs &&
+				dietaryFiber == that.dietaryFiber &&
+				totalSugars == that.totalSugars &&
+				addedSugars == that.addedSugars &&
+				protein == that.protein &&
+				vitaminD == that.vitaminD &&
+				calcium == that.calcium &&
+				iron == that.iron &&
+				potassium == that.potassium;
 	}
 }
