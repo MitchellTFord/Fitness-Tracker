@@ -14,6 +14,7 @@ import com.fitnesstracker.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    //add all variables
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
