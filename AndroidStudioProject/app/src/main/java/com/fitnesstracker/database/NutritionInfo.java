@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.util.Random;
 
 /**
  * Class representing the nutrition facts of a serving of food or a combination thereof.
@@ -105,6 +105,35 @@ public class NutritionInfo {
 		this.calcium = other.calcium;
 		this.iron = other.iron;
 		this.potassium = other.potassium;
+	}
+
+	/**
+	 * Create a new NutritionInfo object with randomly assigned attributes.
+	 *
+	 * @return the new object
+	 */
+	public static NutritionInfo makeRandom() {
+		NutritionInfo nutritionInfo = new NutritionInfo();
+		Random random = new Random();
+
+		nutritionInfo.calories = random.nextInt(1000);
+		nutritionInfo.fatCalories = random.nextInt(1000);
+		nutritionInfo.totalFat = random.nextInt(500);
+		nutritionInfo.saturatedFat = random.nextInt(500);
+		nutritionInfo.transFat = random.nextInt(500);
+		nutritionInfo.cholesterol = random.nextInt(500);
+		nutritionInfo.sodium = random.nextInt(2500);
+		nutritionInfo.totalCarbs = random.nextInt(500);
+		nutritionInfo.dietaryFiber = random.nextInt(500);
+		nutritionInfo.totalSugars = random.nextInt(500);
+		nutritionInfo.addedSugars = random.nextInt(500);
+		nutritionInfo.protein = random.nextInt(500);
+		nutritionInfo.vitaminD = random.nextInt(500);
+		nutritionInfo.calcium = random.nextInt(500);
+		nutritionInfo.iron = random.nextInt(500);
+		nutritionInfo.potassium = random.nextInt(500);
+
+		return nutritionInfo;
 	}
 
 	/**

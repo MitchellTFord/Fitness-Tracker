@@ -97,10 +97,10 @@ public class FoodFragment extends Fragment {
 								"create a new food",
 						Toast.LENGTH_LONG).show();
 				Toast.makeText(requireContext(),
-						"Adding an apple for testing",
+						"Adding an random food for testing",
 						Toast.LENGTH_LONG).show();
 
-				viewModel.insert(new Food("Apple", "apple", 1d));
+				viewModel.insert(Food.makeRandom());
 			}
 		});
 	}
