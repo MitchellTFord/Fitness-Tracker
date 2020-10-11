@@ -41,7 +41,8 @@ public abstract class FTDao {
 	 *
 	 * @return a {@link List} of all the Foods in the database
 	 */
-	@Query("SELECT * FROM Food")
+	@Query("SELECT * FROM Food " +
+			       "ORDER BY name")
 	public abstract LiveData<List<Food>> getAllFoods();
 
 	/**
