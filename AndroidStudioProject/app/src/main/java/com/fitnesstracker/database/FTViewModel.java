@@ -19,30 +19,44 @@ public class FTViewModel extends AndroidViewModel {
 	private FTDao dao;
 	private ExecutorService executor;
 
+	private LiveData<List<Food>> food;
+
 	public FTViewModel(@NonNull Application application) {
 		super(application);
 		dao = FTDatabase.getDatabase(application).ftDao();
-		executor = FTDatabase.databaseWriteExecutor;
+		executor = FTDatabase.executor;
 	}
 
 	public LiveData<List<Food>> getAllFoods() {
 		return dao.getAllFoods();
 	}
 
-	public LiveData<Food> getFood(long id) {
-		AtomicReference<LiveData<Food>> food = new AtomicReference<>();
-		executor.execute(() -> food.set(dao.getFood(id)));
+	public LiveData<Food> getFood(final long id) {
+		final AtomicReference<LiveData<Food>> food = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				food.set(dao.getFood(id));
+			}
+		});
 		return food.get();
 	}
 
-	public LiveData<List<Food>> getFoods(String name) {
-		AtomicReference<LiveData<List<Food>>> foods = new AtomicReference<>();
-		executor.execute(() -> foods.set(dao.getFood(name)));
+	public LiveData<List<Food>> getFoods(final String name) {
+		final AtomicReference<LiveData<List<Food>>> foods = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				foods.set(dao.getFood(name));
+			}
+		});
 		return foods.get();
 	}
 
-	public void insert(Food... foods) {
-		executor.execute(() -> dao.insert(foods));
+	public void insert(final Food... foods) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				dao.insert(foods);
+			}
+		});
 	}
 
 	/**
@@ -52,9 +66,13 @@ public class FTViewModel extends AndroidViewModel {
 	 *
 	 * @return the number of items updated
 	 */
-	public int update(Food... foods) {
-		AtomicReference<Integer> numUpdates = new AtomicReference<>();
-		executor.execute(() -> numUpdates.set(dao.update(foods)));
+	public int update(final Food... foods) {
+		final AtomicReference<Integer> numUpdates = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				numUpdates.set(dao.update(foods));
+			}
+		});
 		return numUpdates.get();
 	}
 
@@ -65,9 +83,13 @@ public class FTViewModel extends AndroidViewModel {
 	 *
 	 * @return the number of items deleted
 	 */
-	public int delete(Food... foods) {
-		AtomicReference<Integer> numDeletes = new AtomicReference<>();
-		executor.execute(() -> numDeletes.set(dao.delete(foods)));
+	public int delete(final Food... foods) {
+		final AtomicReference<Integer> numDeletes = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				numDeletes.set(dao.delete(foods));
+			}
+		});
 		return numDeletes.get();
 	}
 
@@ -77,8 +99,12 @@ public class FTViewModel extends AndroidViewModel {
 	 * @return all diary entries from the database
 	 */
 	public LiveData<List<DiaryEntry>> getAllDiaryEntries() {
-		AtomicReference<LiveData<List<DiaryEntry>>> diaryEntries = new AtomicReference<>();
-		executor.execute(() -> diaryEntries.set(dao.getAllDiaryEntries()));
+		final AtomicReference<LiveData<List<DiaryEntry>>> diaryEntries = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				diaryEntries.set(dao.getAllDiaryEntries());
+			}
+		});
 		return diaryEntries.get();
 	}
 
@@ -89,9 +115,13 @@ public class FTViewModel extends AndroidViewModel {
 	 *
 	 * @return the diary entry with the matching id
 	 */
-	public LiveData<DiaryEntry> getDiaryEntry(long id) {
-		AtomicReference<LiveData<DiaryEntry>> diaryEntry = new AtomicReference<>();
-		executor.execute(() -> diaryEntry.set(dao.getDiaryEntry(id)));
+	public LiveData<DiaryEntry> getDiaryEntry(final long id) {
+		final AtomicReference<LiveData<DiaryEntry>> diaryEntry = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				diaryEntry.set(dao.getDiaryEntry(id));
+			}
+		});
 		return diaryEntry.get();
 	}
 
@@ -101,21 +131,33 @@ public class FTViewModel extends AndroidViewModel {
 	 * @param date the date to search for
 	 * @return a list of diary entries occurring on the given date
 	 */
-	public LiveData<List<DiaryEntry>> getDiaryEntries(Date date) {
-		AtomicReference<LiveData<List<DiaryEntry>>> diaryEntry = new AtomicReference<>();
-		executor.execute(() -> diaryEntry.set(dao.getDiaryEntries(date)));
+	public LiveData<List<DiaryEntry>> getDiaryEntries(final Date date) {
+		final AtomicReference<LiveData<List<DiaryEntry>>> diaryEntry = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				diaryEntry.set(dao.getDiaryEntries(date));
+			}
+		});
 		return diaryEntry.get();
 	}
 
-	public int update(DiaryEntry... diaryEntries) {
-		AtomicReference<Integer> numUpdates = new AtomicReference<>();
-		executor.execute(() -> numUpdates.set(dao.delete(diaryEntries)));
+	public int update(final DiaryEntry... diaryEntries) {
+		final AtomicReference<Integer> numUpdates = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				numUpdates.set(dao.delete(diaryEntries));
+			}
+		});
 		return numUpdates.get();
 	}
 
-	public int delete(DiaryEntry... diaryEntry) {
-		AtomicReference<Integer> numDeletes = new AtomicReference<>();
-		executor.execute(() -> numDeletes.set(dao.delete(diaryEntry)));
+	public int delete(final DiaryEntry... diaryEntry) {
+		final AtomicReference<Integer> numDeletes = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				numDeletes.set(dao.delete(diaryEntry));
+			}
+		});
 		return numDeletes.get();
 	}
 
@@ -123,19 +165,31 @@ public class FTViewModel extends AndroidViewModel {
 		insert(new DiaryEntryFoodCrossRef(diaryEntry, food, numServings));
 	}
 
-	public void insert(DiaryEntryFoodCrossRef diaryEntryFoodCrossRef) {
-		executor.execute(() -> dao.insert(diaryEntryFoodCrossRef));
+	public void insert(final DiaryEntryFoodCrossRef diaryEntryFoodCrossRef) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				dao.insert(diaryEntryFoodCrossRef);
+			}
+		});
 	}
 
-	public int update(DiaryEntryFoodCrossRef diaryEntryFoodCrossRef) {
-		AtomicReference<Integer> numUpdates = new AtomicReference<>();
-		executor.execute(() -> numUpdates.set(dao.update(diaryEntryFoodCrossRef)));
+	public int update(final DiaryEntryFoodCrossRef diaryEntryFoodCrossRef) {
+		final AtomicReference<Integer> numUpdates = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				numUpdates.set(dao.update(diaryEntryFoodCrossRef));
+			}
+		});
 		return numUpdates.get();
 	}
 
-	public LiveData<List<FoodServingTuple>> getFoodsFromDiary(DiaryEntry diaryEntry) {
-		AtomicReference<LiveData<List<FoodServingTuple>>> tuples = new AtomicReference<>();
-		executor.execute(() -> tuples.set(dao.getFoodsFromDiary(diaryEntry)));
+	public LiveData<List<FoodServingTuple>> getFoodsFromDiary(final DiaryEntry diaryEntry) {
+		final AtomicReference<LiveData<List<FoodServingTuple>>> tuples = new AtomicReference<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				tuples.set(dao.getFoodsFromDiary(diaryEntry));
+			}
+		});
 		return tuples.get();
 	}
 }

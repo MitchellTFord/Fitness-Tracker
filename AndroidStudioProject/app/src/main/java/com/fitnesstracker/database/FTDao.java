@@ -122,7 +122,7 @@ public abstract class FTDao {
 	 *
 	 * @param diaryEntryID the id of the diary entry to get the foods of
 	 *
-	 * @return a list of {@link FoodServingTuple.FoodServingTuple} objects associated with this diary entry
+	 * @return a list of {@link FoodServingTuple} objects associated with this diary entry
 	 */
 	@NotNull
 	@Transaction
