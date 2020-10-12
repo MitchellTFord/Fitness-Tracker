@@ -3,6 +3,7 @@ package com.fitnesstracker.database;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,8 +17,9 @@ import org.jetbrains.annotations.NotNull;
 		        @ForeignKey(entity = Food.class,
 		                    parentColumns = "id",
 		                    childColumns = "food_id",
-		                    onDelete = ForeignKey.CASCADE)})
-public class DiaryEntryFoodCrossRef { // TODO: there should probably be an index on food_id
+		                    onDelete = ForeignKey.CASCADE)},
+        indices = @Index("food_id"))
+public class DiaryEntryFoodCrossRef {
 	@ColumnInfo(name = "diary_entry_id")
 	private long diaryEntryID;
 
