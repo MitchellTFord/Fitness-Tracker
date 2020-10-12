@@ -2,6 +2,7 @@ package com.fitnesstracker.ui;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,12 +10,15 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import android.content.Intent;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.fitnesstracker.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    //add all variables
+    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNav, navController);
 
         //AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.diary_page, R.id.food_page, R.id.exercise_page).build();
+
+        // Get the Intent that started this activity and extract the string
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+
+        // Capture the layout's TextView and set the string as its text
+        TextView textView = findViewById(R.id.textView);
+        textView.setText(message);
     }
 
     @Override
@@ -34,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.onNavDestinationSelected(item, navController)
                 || super.onOptionsItemSelected(item);
+    }
+
+    /** Called when the user taps the Add Meal button */
+    public void addMeal(View view) {
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        EditText editText = (EditText) findViewById(R.id.editText);
+        String message = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 
     //    /**
