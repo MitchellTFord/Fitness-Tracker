@@ -1,5 +1,6 @@
 package com.fitnesstracker.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 		switch (item.getItemId()) {
 			case R.id.action_open_settings:
 				Toast.makeText(this, "Opening the settings menu", Toast.LENGTH_SHORT).show();
-				openFragment(new FTSettingsFragment());
+				openSettings();
 				return true;
 			default:
 				return false;
@@ -66,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
 		getMenuInflater().inflate(R.menu.top_toolbar, menu);
 
 		return super.onPrepareOptionsMenu(menu);
+	}
+
+	public void openSettings() {
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
 	}
 
 	/**

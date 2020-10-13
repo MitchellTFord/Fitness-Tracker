@@ -1,26 +1,28 @@
 <resources>
     <string name="app_name">Fitness Tracker</string>
+
+    <!-- Fragment Titles -->
     <string name="title_home">Home</string>
     <string name="title_diary">Diary</string>
     <string name="title_food">Food</string>
     <string name="title_exercise">Exercise</string>
+
+    <!-- Home Fragment -->
     <string name="new_food_button">New Food</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="settings">Settings</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <!-- Top Toolbar -->
+    <string name="open_settings_title">Settings</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <!-- Preference Headers -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="database_header">Database</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- Database Preferences -->
+    <string name="clear_db_title">Clear Database</string>
+    <string name="clear_db_summary">Delete all data from the database</string>
+    <string name="clear_db_message">Cleared all tables</string>
+
+    <!-- Miscellaneous Strings -->
+    <string name="todo">TODO</string>
+
 </resources>
