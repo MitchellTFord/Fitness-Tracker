@@ -17,14 +17,27 @@ import java.util.concurrent.atomic.AtomicReference;
 public class FTViewModel extends AndroidViewModel {
 
 	private FTDao dao;
+	private FTDatabase db;
 	private ExecutorService executor;
 
 	private LiveData<List<Food>> food;
 
+	private LiveData<List<DiaryEntry>> diaryEntries;
+	private LiveData<List<DiaryEntryFoodCrossRef>> diaryEntryFoodCrossRefs;
+
 	public FTViewModel(@NonNull Application application) {
 		super(application);
-		dao = FTDatabase.getDatabase(application).ftDao();
+		db = FTDatabase.getDatabase(application);
+		dao = db.ftDao();
 		executor = FTDatabase.executor;
+	}
+
+	public void clearAllTables() {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				db.clearAllTables();
+			}
+		});
 	}
 
 	public LiveData<List<Food>> getAllFoods() {
@@ -192,4 +205,6 @@ public class FTViewModel extends AndroidViewModel {
 		});
 		return tuples.get();
 	}
+
+
 }
