@@ -16,10 +16,10 @@ import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
-	private List<Food> dataset;
+	private List<Food> data;
 
 	public FoodAdapter(List<Food> dataset) {
-		setDataset(dataset);
+		setData(dataset);
 	}
 
 	@NonNull
@@ -36,7 +36,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-		Food food = dataset.get(position);
+		Food food = data.get(position);
 
 		TextView nameTextView = holder.nameTextView;
 		nameTextView.setText(food.getName());
@@ -47,11 +47,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
 	@Override
 	public int getItemCount() {
-		return dataset.size();
+		return data.size();
 	}
 
-	public void setDataset(List<Food> dataset) {
-		this.dataset = dataset;
+	public void setData(List<Food> data) {
+		this.data = data;
 		notifyDataSetChanged();
 	}
 

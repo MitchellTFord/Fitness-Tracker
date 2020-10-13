@@ -6,16 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.FoodFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_food_fab"
         style="@style/Platform.MaterialComponents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
+        android:contentDescription="@string/add_food_fab_desc"
         android:src="@drawable/ic_plus"
         app:fabSize="auto"
         app:icon="@drawable/ic_plus"
@@ -27,7 +25,7 @@
         android:id="@+id/food_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scrollbars="none"
+        android:scrollbars="vertical|none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

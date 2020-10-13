@@ -8,7 +8,13 @@
     <string name="title_exercise">Exercise</string>
 
     <!-- Home Fragment -->
-    <string name="new_food_button">New Food</string>
+    <string name="welcome">Welcome!</string>
+    <string name="new_workout_button">Add Workout</string>
+    <string name="new_meal_button">Add Meal</string>
+    <string name="view_progress_button">View Progress</string>
+
+    <!-- Food Fragment -->
+    <string name="add_food_fab_desc">Add Food</string>
 
     <!-- Top Toolbar -->
     <string name="open_settings_title">Settings</string>
@@ -24,5 +30,7 @@
 
     <!-- Miscellaneous Strings -->
     <string name="todo">TODO</string>
+
+    <string name="new_food_button">New Food</string>
 
 </resources>
