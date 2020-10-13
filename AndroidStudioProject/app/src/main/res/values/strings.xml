@@ -14,10 +14,14 @@
     <string name="view_progress_button">View Progress</string>
 
     <!-- Food Fragment -->
-    <string name="add_food_fab_desc">Add Food</string>
+    <string name="add_food_fab_desc">Add a Food</string>
     <string name="empty_food_rv_text">
-        No data to display.\nTry adding food using the plus button.
+        No data to display.\nTry adding a food using the plus button.
     </string>
+
+    <!-- Diary Fragment -->
+    <string name="add_diary_fab_desc">Add a Diary Entry</string>
+    <string name="empty_diary_rv_text">No data to display.\nTry adding a diary entry using the plus button.</string>
 
     <!-- Top Toolbar -->
     <string name="open_settings_title">Settings</string>
@@ -36,8 +40,7 @@
     <string name="todo">TODO</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-
-
-    <string name="new_food_button">New Food</string>
+    <string name="search">Search</string>
+    <string name="new_food_button">New Food</string> // not sure where this is used
 
 </resources>
