@@ -75,6 +75,12 @@ public class FoodFragment extends Fragment {
 		// Set up the RecyclerView
 		RecyclerView foodRV = (RecyclerView) view.findViewById(R.id.food_recycler_view);
 		final FoodAdapter adapter = new FoodAdapter(new ArrayList<Food>());
+		adapter.setEmptyRVHandler(new EmptyRVHandler() {
+			@Override public void handleEmptyRV(boolean isEmpty) {
+				requireView().findViewById(R.id.food_rv_empty_text)
+						.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+			}
+		});
 		foodRV.setAdapter(adapter);
 		foodRV.setLayoutManager(new LinearLayoutManager(getActivity()));
 		viewModel.getAllFoods().observe(getViewLifecycleOwner(), new Observer<List<Food>>() {
@@ -88,13 +94,8 @@ public class FoodFragment extends Fragment {
 		addFoodFAB.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
 				Toast.makeText(requireContext(),
-						"Pressing this button should open a dialog for the user to " +
-								"create a new food",
-						Toast.LENGTH_LONG).show();
-				Toast.makeText(requireContext(),
 						"Adding an random food for testing",
 						Toast.LENGTH_LONG).show();
-
 				viewModel.insert(Food.makeRandom());
 			}
 		});

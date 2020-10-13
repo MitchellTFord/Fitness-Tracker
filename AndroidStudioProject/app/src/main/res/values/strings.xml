@@ -15,6 +15,9 @@
 
     <!-- Food Fragment -->
     <string name="add_food_fab_desc">Add Food</string>
+    <string name="empty_food_rv_text">
+        No data to display.\nTry adding food using the plus button.
+    </string>
 
     <!-- Top Toolbar -->
     <string name="open_settings_title">Settings</string>
