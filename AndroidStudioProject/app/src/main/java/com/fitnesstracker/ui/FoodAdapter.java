@@ -13,6 +13,7 @@ import com.fitnesstracker.R;
 import com.fitnesstracker.database.Food;
 
 import java.util.List;
+import java.util.Locale;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
@@ -44,7 +45,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 		nameTextView.setText(food.getName());
 
 		TextView servingInfoTextView = holder.servingInfoTextView;
-		servingInfoTextView.setText(String.format("%.2f %s", food.getServingSize(), food.getServingUnit()));
+		servingInfoTextView.setText(String.format(Locale.getDefault(),
+				"%.2f %s",
+				food.getServingSize(),
+				food.getServingUnit())
+		);
 	}
 
 	@Override
@@ -63,12 +68,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 	}
 
 	public void handleEmpty() {
-		if(emptyRVHandler != null) {
+		if (emptyRVHandler != null) {
 			emptyRVHandler.handleEmptyRV(data == null || data.isEmpty());
 		}
 	}
 
-	public class ViewHolder extends RecyclerView.ViewHolder {
+	public static class ViewHolder extends RecyclerView.ViewHolder {
 
 		public TextView nameTextView;
 		public TextView servingInfoTextView;

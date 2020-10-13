@@ -95,7 +95,7 @@ public class FoodFragment extends Fragment {
 			@Override public void onClick(View v) {
 				Toast.makeText(requireContext(),
 						"Adding an random food for testing",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 				viewModel.insert(Food.makeRandom());
 			}
 		});
