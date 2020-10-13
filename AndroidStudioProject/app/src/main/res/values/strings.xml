@@ -27,9 +27,13 @@
     <string name="clear_db_title">Clear Database</string>
     <string name="clear_db_summary">Delete all data from the database</string>
     <string name="clear_db_message">Cleared all tables</string>
+    <string name="clear_db_confirmation_dialog">Are you sure you want to delete all database entries?</string>
 
     <!-- Miscellaneous Strings -->
     <string name="todo">TODO</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
 
     <string name="new_food_button">New Food</string>
 
