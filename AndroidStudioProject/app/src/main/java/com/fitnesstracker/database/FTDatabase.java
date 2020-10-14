@@ -19,10 +19,10 @@ public abstract class FTDatabase extends RoomDatabase {
 
 	private static volatile FTDatabase INSTANCE;
 	private static final int NUMBER_OF_THREADS = 4;
-	static final ExecutorService databaseWriteExecutor =
+	public static final ExecutorService executor =
 			Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-	static FTDatabase getDatabase(final Context context) {
+	public static FTDatabase getDatabase(final Context context) {
 		if (INSTANCE == null) {
 			synchronized (FTDatabase.class) {
 				INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FTDatabase.class,

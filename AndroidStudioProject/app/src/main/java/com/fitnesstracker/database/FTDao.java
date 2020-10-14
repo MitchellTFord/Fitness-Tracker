@@ -1,5 +1,6 @@
 package com.fitnesstracker.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -29,19 +30,20 @@ public abstract class FTDao {
 	 */
 	@NotNull
 	@Query("SELECT * FROM Food WHERE Food.id = :id")
-	public abstract Food getFood(long id);
+	public abstract LiveData<Food> getFood(long id);
 
 	@NotNull
 	@Query("SELECT * FROM Food WHERE Food.name LIKE :name")
-	public abstract List<Food> getFood(@NotNull String name);
+	public abstract LiveData<List<Food>> getFood(@NotNull String name);
 
 	/**
 	 * Query the database for a {@link java.util.List} of all the Foods it has.
 	 *
 	 * @return a {@link List} of all the Foods in the database
 	 */
-	@Query("SELECT * FROM Food")
-	public abstract List<Food> getAllFoods();
+	@Query("SELECT * FROM Food " +
+			       "ORDER BY name")
+	public abstract LiveData<List<Food>> getAllFoods();
 
 	/**
 	 * Insert {@link Food} objects into the database.
@@ -101,11 +103,11 @@ public abstract class FTDao {
 
 	@Nullable
 	@Query("SELECT * FROM diary_entry WHERE diary_entry.id = :id")
-	public abstract DiaryEntry getDiaryEntry(long id);
+	public abstract LiveData<DiaryEntry> getDiaryEntry(long id);
 
 	@NotNull
 	@Query("SELECT * FROM diary_entry WHERE diary_entry.date = :date")
-	public abstract List<DiaryEntry> getDiaryEntries(Date date);
+	public abstract LiveData<List<DiaryEntry>> getDiaryEntries(Date date);
 
 	/**
 	 * Query the database for a {@link List} of all the diary entries it has.
@@ -114,14 +116,14 @@ public abstract class FTDao {
 	 */
 	@NotNull
 	@Query("SELECT * FROM diary_entry")
-	public abstract List<DiaryEntry> getAllDiaryEntries();
+	public abstract LiveData<List<DiaryEntry>> getAllDiaryEntries();
 
 	/**
 	 * Get a list of foods and numbers of servings associated with a diary entry by its ID.
 	 *
 	 * @param diaryEntryID the id of the diary entry to get the foods of
 	 *
-	 * @return a list of {@link FoodServingTuple.FoodServingTuple} objects associated with this diary entry
+	 * @return a list of {@link FoodServingTuple} objects associated with this diary entry
 	 */
 	@NotNull
 	@Transaction
@@ -130,7 +132,7 @@ public abstract class FTDao {
 			       "WHERE food.id = diary_food.food_id " +
 			       "AND diary_entry.id = diary_food.diary_entry_id " +
 			       "AND diary_entry.id = :diaryEntryID")
-	public abstract List<FoodServingTuple> getFoodsFromDiary(long diaryEntryID);
+	public abstract LiveData<List<FoodServingTuple>> getFoodsFromDiary(long diaryEntryID);
 
 	/**
 	 * Get a list of foods and numbers of servings associated with a diary entry.
@@ -140,7 +142,7 @@ public abstract class FTDao {
 	 * @return a list of {@link FoodServingTuple} objects associated with this diary entry
 	 */
 	@NotNull
-	public List<FoodServingTuple> getFoodsFromDiary(@NotNull DiaryEntry diaryEntry) {
+	public LiveData<List<FoodServingTuple>> getFoodsFromDiary(@NotNull DiaryEntry diaryEntry) {
 		return getFoodsFromDiary(diaryEntry.getId());
 	}
 
@@ -154,7 +156,7 @@ public abstract class FTDao {
 	public abstract int delete(@NotNull DiaryEntryFoodCrossRef... diaryEntryFoodCrossRef);
 
 	@Query("SELECT * FROM diary_food")
-	public abstract List<DiaryEntryFoodCrossRef> getAllDiaryEntryFoodCrossRef();
+	public abstract LiveData<List<DiaryEntryFoodCrossRef>> getAllDiaryEntryFoodCrossRef();
 
 	public void addDiaryEntry(DiaryEntry diaryEntry, Food food, double numServings) {
 		insert(new DiaryEntryFoodCrossRef(diaryEntry, food, numServings));

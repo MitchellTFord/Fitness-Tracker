@@ -51,14 +51,14 @@ public class DatabaseTest {
 	@Test
 	public void foodInsertDeleteTest() throws Exception {
 		// Assert that there are currently no foods in the database
-		assertEquals(0, dao.getAllFoods().size());
+		assertEquals(0, dao.getAllFoods().getValue().size());
 
 		// Add a new Food object to the database
 		Food testFood = new Food("test food", "cup", 2.6);
 		dao.insert(testFood);
 
 		// Assert that there is now one food in the database
-		assertEquals(1, dao.getAllFoods().size());
+		assertEquals(1, dao.getAllFoods().getValue().size());
 
 		// Ensure that the food object can be retrieved
 		assertEquals(testFood, dao.getFood(testFood.getId()));
@@ -67,13 +67,13 @@ public class DatabaseTest {
 		assertEquals(1, dao.delete(testFood));
 
 		// Assert that there are currently no foods in the database
-		assertEquals(0, dao.getAllFoods().size());
+		assertEquals(0, dao.getAllFoods().getValue().size());
 	}
 
 	@Test
 	public void foodUpdateTest() throws Exception {
 		// Assert that there are currently no foods in the database
-		assertEquals(0, dao.getAllFoods().size());
+		assertEquals(0, dao.getAllFoods().getValue().size());
 
 		// Add a new Food object to the database
 		Food testFood = new Food("test food", "cup", 2.6);
@@ -87,7 +87,7 @@ public class DatabaseTest {
 		assertEquals(testFood, dao.getFood(testFood.getId()));
 
 		// Ensure that the food object can be retrieved using its new name
-		assertEquals(testFood, dao.getFood(testFood.getName()).get(0));
+		assertEquals(testFood, dao.getFood(testFood.getName()).getValue().get(0));
 
 		// Remove the food object to clean up for other tests
 		dao.delete(testFood);
@@ -100,13 +100,13 @@ public class DatabaseTest {
 	@Test
 	public void basicDiaryEntryTest() {
 		// Assert that there are currently no diary entries in the database
-		assertEquals(0, dao.getAllDiaryEntries().size());
+		assertEquals(0, dao.getAllDiaryEntries().getValue().size());
 
 		DiaryEntry testDiaryEntry = new DiaryEntry(new Date(System.currentTimeMillis()));
 		dao.insert(testDiaryEntry);
 
 		// Assert that there is now one diary entry in the database
-		assertEquals(1, dao.getAllDiaryEntries().size());
+		assertEquals(1, dao.getAllDiaryEntries().getValue().size());
 
 		// Attempt to update this diary entry
 		testDiaryEntry.setDate(new Date(System.currentTimeMillis() + 1000));
@@ -117,13 +117,13 @@ public class DatabaseTest {
 
 		// Ensure that the diary entry can be deleted
 		dao.delete(testDiaryEntry);
-		assertEquals(0, dao.getAllDiaryEntries().size());
+		assertEquals(0, dao.getAllDiaryEntries().getValue().size());
 	}
 
 	@Test
 	public void diaryImplementationTest() {
 		// Assert that there are currently no diary entries in the database
-		assertEquals(0, dao.getAllDiaryEntries().size());
+		assertEquals(0, dao.getAllDiaryEntries().getValue().size());
 
 		// Create and add a diary entry and a food
 		DiaryEntry testDiaryEntry = new DiaryEntry(new Date(System.currentTimeMillis()));
@@ -136,10 +136,10 @@ public class DatabaseTest {
 		dao.addDiaryEntry(testDiaryEntry, testFood, numServings1);
 
 		// Assert that there is now one food-diary cross reference
-		assertEquals(1, dao.getAllDiaryEntries().size());
+		assertEquals(1, dao.getAllDiaryEntries().getValue().size());
 
 		// Query the database for all FoodServingTuple instances associated with this diary entry
-		List<FoodServingTuple> results = dao.getFoodsFromDiary(testDiaryEntry);
+		List<FoodServingTuple> results = dao.getFoodsFromDiary(testDiaryEntry).getValue();
 		assertEquals(1, results.size());
 		assertEquals(testFood, results.get(0).getFood());
 		assertEquals(numServings1, results.get(0).getNumServings(), 0);
