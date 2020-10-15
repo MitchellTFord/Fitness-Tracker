@@ -18,6 +18,6 @@ jobs:
       with:
         java-version: 1.7
     - name: Change wrapper permissions
-      run: chmod +x ./gradlew
+      run: chmod +x ./AndroidStudioProject/gradlew
     - name: Build with Gradle
       run: ./AndroidStudioProject/gradlew build
