@@ -16,6 +16,13 @@ import java.util.Random;
 @Entity(tableName = "food",
         primaryKeys = "id")
 public class Food {
+
+	private static final String[] SAMPLE_NAMES = new String[] {"Apple", "Orange", "Banana", "Egg",
+			"Potato", "Bread", "Cheese"};
+
+	private static final String[] SAMPLE_SERVING_UNITS = new String[] {"grams", "cups", "oz", "mL",
+			"lbs"};
+
 	/** A randomly assigned identifier for this Food. */
 	@ColumnInfo(name = "id")
 	private long id;
@@ -52,6 +59,25 @@ public class Food {
 
 		// Create a default NutritionInfo object
 		this.setNutritionInfo(new NutritionInfo());
+	}
+
+	/**
+	 * Create a new Food object with a name randomly selected from {@link Food#SAMPLE_NAMES},
+	 * a serving unit randomly selected from {@link Food#SAMPLE_SERVING_UNITS}, a randomly
+	 * generated serving size, and a {@link Food#nutritionInfo} generated using
+	 * {@link NutritionInfo#makeRandom()}.
+	 *
+	 * @return the newly created Food object
+	 */
+	public static Food makeRandom() {
+		Random random = new Random();
+		Food food = new Food(
+				SAMPLE_NAMES[random.nextInt(SAMPLE_NAMES.length)],
+				SAMPLE_SERVING_UNITS[random.nextInt(SAMPLE_SERVING_UNITS.length)],
+				random.nextInt(1000) * random.nextDouble()
+		);
+		food.setNutritionInfo(NutritionInfo.makeRandom());
+		return food;
 	}
 
 	@Override
