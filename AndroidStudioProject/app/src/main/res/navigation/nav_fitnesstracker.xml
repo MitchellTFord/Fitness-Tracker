@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_fitnesstracker"
-    app:startDestination="@id/diaryFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/diaryFragment"
@@ -19,11 +19,7 @@
         android:id="@+id/foodFragment"
         android:name="com.fitnesstracker.ui.FoodFragment"
         android:label="fragment_food"
-        tools:layout="@layout/fragment_food">
-        <action
-            android:id="@+id/action_foodFragment_to_addFoodFragment"
-            app:destination="@id/addFoodFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_food"/>
     <fragment
         android:id="@+id/addFoodFragment"
         android:name="com.fitnesstracker.ui.AddFoodFragment"
@@ -33,5 +29,9 @@
         android:id="@+id/homeFragment"
         android:name="com.fitnesstracker.ui.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_addFoodFragment"
+            app:destination="@id/addFoodFragment" />
+    </fragment>
 </navigation>

@@ -15,11 +15,12 @@ import android.content.Intent;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.fitnesstracker.AddMeal;
 import com.fitnesstracker.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+    public static final String EXTRA_MESSAGE = "Extra message!";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
         //AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.diary_page, R.id.food_page, R.id.exercise_page).build();
 
-        // Get the Intent that started this activity and extract the string
+        // Get the Intent that started this activity
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.textView);
         textView.setText(message);
+
     }
 
     @Override
@@ -51,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
 
     /** Called when the user taps the Add Meal button */
     public void addMeal(View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
+        Intent intent = new Intent(this, AddMeal.class);
+//        EditText editText = findViewById(R.id.editText);
+//        String message = editText.getText().toString();
+//        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
 
