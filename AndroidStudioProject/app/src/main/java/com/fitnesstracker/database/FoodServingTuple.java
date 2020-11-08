@@ -1,19 +1,14 @@
 package com.fitnesstracker.database;
 
-import androidx.room.Embedded;
-
-import com.fitnesstracker.database.Food;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple class for storing the results of {@link FTDao#getFoodsFromDiary(long)}.
- * <p>
- * This class's fields are not encapsulated
  */
 public class FoodServingTuple {
-	@Embedded
+
 	private Food food;
+
 	private double numServings;
 
 	public FoodServingTuple(@NotNull Food food, double numServings) {
@@ -34,7 +29,9 @@ public class FoodServingTuple {
 	}
 
 	public void setNumServings(double numServings) {
-		assert numServings >= 0 : "numServings must be greater than or equal to zero.";
+		if (numServings < 0) {
+			throw new IllegalArgumentException("numServings must be greater than or equal to zero.");
+		}
 		this.numServings = numServings;
 	}
 }
