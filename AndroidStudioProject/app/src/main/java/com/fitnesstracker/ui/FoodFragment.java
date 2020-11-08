@@ -81,13 +81,15 @@ public class FoodFragment extends Fragment {
 						.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
 			}
 		});
-		foodRV.setAdapter(adapter);
+
 		foodRV.setLayoutManager(new LinearLayoutManager(getActivity()));
 		viewModel.getAllFoods().observe(getViewLifecycleOwner(), new Observer<List<Food>>() {
 			@Override public void onChanged(List<Food> foods) {
 				adapter.setData(foods);
 			}
 		});
+
+		foodRV.setAdapter(adapter);
 
 		// Set up the floating action button for adding new foods
 		addFoodFAB = view.findViewById(R.id.add_food_fab);

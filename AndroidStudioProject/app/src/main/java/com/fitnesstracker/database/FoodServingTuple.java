@@ -1,5 +1,7 @@
 package com.fitnesstracker.database;
 
+import androidx.room.Embedded;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -7,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FoodServingTuple {
 
+	@Embedded
 	private Food food;
 
 	private double numServings;

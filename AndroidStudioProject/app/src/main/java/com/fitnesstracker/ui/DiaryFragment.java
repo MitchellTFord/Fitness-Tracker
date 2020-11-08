@@ -73,6 +73,7 @@ public class DiaryFragment extends Fragment {
 		viewModel = ViewModelProviders.of(requireActivity()).get(FTViewModel.class);
 
 		RecyclerView rv = (RecyclerView) view.findViewById(R.id.diary_recycler_view);
+
 		final DiaryEntryAdapter adapter = new DiaryEntryAdapter(viewModel);
 		adapter.setEmptyRVHandler(new EmptyRVHandler() {
 			@Override public void handleEmptyRV(boolean isEmpty) {
@@ -81,10 +82,13 @@ public class DiaryFragment extends Fragment {
 			}
 		});
 		rv.setAdapter(adapter);
+
 		rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-		viewModel.getDiaryEntries().observeForever(new Observer<List<DiaryEntry>>() {
+
+		viewModel.getAllDiaryEntries().observeForever(new Observer<List<DiaryEntry>>() {
 			@Override
 			public void onChanged(List<DiaryEntry> diaryEntries) {
+				System.out.println("Diary Data Changed");
 				adapter.setData(diaryEntries);
 			}
 		});
