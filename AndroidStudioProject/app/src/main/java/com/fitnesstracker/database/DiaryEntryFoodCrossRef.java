@@ -20,7 +20,7 @@ import java.util.Random;
 		                    parentColumns = "id",
 		                    childColumns = "food_id",
 		                    onDelete = ForeignKey.CASCADE)},
-        indices = @Index("food_id"))
+        indices = @Index(value = {"diary_entry_id", "food_id"}))
 public class DiaryEntryFoodCrossRef {
 
 	@ColumnInfo(name = "id")
