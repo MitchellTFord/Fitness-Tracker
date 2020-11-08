@@ -7,8 +7,10 @@ import androidx.room.Index;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 @Entity(tableName = "diary_food",
-        primaryKeys = {"diary_entry_id", "food_id"},
+        primaryKeys = {"id"},
         foreignKeys = {
 		        @ForeignKey(entity = DiaryEntry.class,
 		                    parentColumns = "id",
@@ -20,6 +22,10 @@ import org.jetbrains.annotations.NotNull;
 		                    onDelete = ForeignKey.CASCADE)},
         indices = @Index("food_id"))
 public class DiaryEntryFoodCrossRef {
+
+	@ColumnInfo(name = "id")
+	private long id;
+
 	@ColumnInfo(name = "diary_entry_id")
 	private long diaryEntryID;
 
@@ -37,6 +43,7 @@ public class DiaryEntryFoodCrossRef {
 	 * @param numServings the number of servings of the food eaten
 	 */
 	public DiaryEntryFoodCrossRef(@NotNull DiaryEntry diaryEntry, @NotNull Food food, double numServings) {
+		this.id = new Random().nextLong();
 		this.setDiaryEntryID(diaryEntry.getId());
 		this.setFoodID(food.getId());
 		this.setNumServings(numServings);
@@ -51,11 +58,19 @@ public class DiaryEntryFoodCrossRef {
 	 * @param foodID the ID of the food
 	 * @param numServings the number of servings of the food eaten
 	 */
-	@Deprecated
 	public DiaryEntryFoodCrossRef(long diaryEntryID, long foodID, double numServings) {
 		this.setDiaryEntryID(diaryEntryID);
 		this.setFoodID(foodID);
 		this.setNumServings(numServings);
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	@Deprecated
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public long getDiaryEntryID() {
