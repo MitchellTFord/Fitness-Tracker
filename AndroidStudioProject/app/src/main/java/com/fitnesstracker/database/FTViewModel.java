@@ -3,8 +3,11 @@ package com.fitnesstracker.database;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import java.util.Date;
 import java.util.List;
@@ -17,14 +20,34 @@ import java.util.concurrent.atomic.AtomicReference;
 public class FTViewModel extends AndroidViewModel {
 
 	private FTDao dao;
+	private FTDatabase db;
 	private ExecutorService executor;
 
 	private LiveData<List<Food>> food;
 
+	private MutableLiveData<Date> diaryEntryDateSearchKey;
+	private LiveData<List<DiaryEntry>> diaryEntries;
+
+	private LiveData<List<DiaryEntryFoodCrossRef>> diaryEntryFoodCrossRefs;
+
+	private MutableLiveData<DiaryEntry> mealSearchKey;
+	private LiveData<List<FoodServingTuple>> meals;
+
 	public FTViewModel(@NonNull Application application) {
 		super(application);
-		dao = FTDatabase.getDatabase(application).ftDao();
+		db = FTDatabase.getDatabase(application);
+		dao = db.ftDao();
 		executor = FTDatabase.executor;
+
+		diaryEntryDateSearchKey = new MutableLiveData<>();
+	}
+
+	public void clearAllTables() {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				db.clearAllTables();
+			}
+		});
 	}
 
 	public LiveData<List<Food>> getAllFoods() {
@@ -108,37 +131,64 @@ public class FTViewModel extends AndroidViewModel {
 		return diaryEntries.get();
 	}
 
+//	/**
+//	 * Get the diary entry with the given id.
+//	 *
+//	 * @param id the id of the diary entry to get
+//	 *
+//	 * @return the diary entry with the matching id
+//	 */
+//	public LiveData<DiaryEntry> getDiaryEntry(final long id) {
+//		final AtomicReference<LiveData<DiaryEntry>> diaryEntry = new AtomicReference<>();
+//		executor.execute(new Runnable() {
+//			@Override public void run() {
+//				diaryEntry.set(dao.getDiaryEntry(id));
+//			}
+//		});
+//		return diaryEntry.get();
+//	}
+
 	/**
-	 * Get the diary entry with the given id.
+	 * Get all diary entries matching the current search key {@link FTViewModel#diaryEntryDateSearchKey}.
 	 *
-	 * @param id the id of the diary entry to get
+	 * The search key is altered using
 	 *
-	 * @return the diary entry with the matching id
+	 * @return
 	 */
-	public LiveData<DiaryEntry> getDiaryEntry(final long id) {
-		final AtomicReference<LiveData<DiaryEntry>> diaryEntry = new AtomicReference<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				diaryEntry.set(dao.getDiaryEntry(id));
-			}
-		});
-		return diaryEntry.get();
+	public LiveData<List<DiaryEntry>> getDiaryEntries() {
+		return getDiaryEntries(null);
 	}
 
 	/**
-	 * Get all diary entries that occur on a given data.
+	 * Get all diary entries that occur on a given date.
+	 *
+	 * If null is passed in, get all diary entries.
 	 *
 	 * @param date the date to search for
 	 * @return a list of diary entries occurring on the given date
 	 */
 	public LiveData<List<DiaryEntry>> getDiaryEntries(final Date date) {
-		final AtomicReference<LiveData<List<DiaryEntry>>> diaryEntry = new AtomicReference<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				diaryEntry.set(dao.getDiaryEntries(date));
+		setDiaryEntryDateSearchKey(date);
+		diaryEntries = Transformations.switchMap(diaryEntryDateSearchKey, new Function<Date, LiveData<List<DiaryEntry>>>() {
+			@Override public LiveData<List<DiaryEntry>> apply(final Date date) {
+				final AtomicReference<LiveData<List<DiaryEntry>>> diaryEntry = new AtomicReference<>();
+				executor.execute(new Runnable() {
+					@Override public void run() {
+						if(date == null) {
+							diaryEntry.set(dao.getAllDiaryEntries());
+						} else {
+							diaryEntry.set(dao.getDiaryEntries(date));
+						}
+					}
+				});
+				return diaryEntry.get();
 			}
 		});
-		return diaryEntry.get();
+		return diaryEntries;
+	}
+
+	public void setDiaryEntryDateSearchKey(Date searchKey) {
+		this.diaryEntryDateSearchKey.setValue(searchKey);
 	}
 
 	public int update(final DiaryEntry... diaryEntries) {
@@ -159,6 +209,14 @@ public class FTViewModel extends AndroidViewModel {
 			}
 		});
 		return numDeletes.get();
+	}
+
+	public void insert(final DiaryEntry diaryEntry) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				dao.insert(diaryEntry);
+			}
+		});
 	}
 
 	public void insert(DiaryEntry diaryEntry, Food food, double numServings) {
@@ -183,13 +241,27 @@ public class FTViewModel extends AndroidViewModel {
 		return numUpdates.get();
 	}
 
-	public LiveData<List<FoodServingTuple>> getFoodsFromDiary(final DiaryEntry diaryEntry) {
-		final AtomicReference<LiveData<List<FoodServingTuple>>> tuples = new AtomicReference<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				tuples.set(dao.getFoodsFromDiary(diaryEntry));
+	public LiveData<List<FoodServingTuple>> getMealsFromDiary() {
+		meals = Transformations.switchMap(mealSearchKey, new Function<DiaryEntry, LiveData<List<FoodServingTuple>>>() {
+			@Override public LiveData<List<FoodServingTuple>> apply(final DiaryEntry diaryEntry) {
+				final AtomicReference<LiveData<List<FoodServingTuple>>> tuples = new AtomicReference<>();
+				executor.execute(new Runnable() {
+					@Override public void run() {
+						tuples.set(dao.getFoodsFromDiary(diaryEntry));
+					}
+				});
+				return tuples.get();
 			}
 		});
-		return tuples.get();
+		return meals;
+	}
+
+	public LiveData<List<FoodServingTuple>> getMealsFromDiary(final DiaryEntry diaryEntry) {
+		setMealSearchKey(diaryEntry);
+		return getMealsFromDiary();
+	}
+
+	public void setMealSearchKey(DiaryEntry mealSearchKey) {
+		this.mealSearchKey.setValue(mealSearchKey);
 	}
 }

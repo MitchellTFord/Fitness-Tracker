@@ -1,11 +1,46 @@
 <resources>
     <string name="app_name">Fitness Tracker</string>
+
+    <!-- Fragment Titles -->
     <string name="title_home">Home</string>
     <string name="title_diary">Diary</string>
     <string name="title_food">Food</string>
     <string name="title_exercise">Exercise</string>
-    <string name="new_food_button">New Food</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Home Fragment -->
+    <string name="welcome">Welcome!</string>
+    <string name="new_workout_button">Add Workout</string>
+    <string name="new_meal_button">Add Meal</string>
+    <string name="view_progress_button">View Progress</string>
+
+    <!-- Food Fragment -->
+    <string name="add_food_fab_desc">Add a Food</string>
+    <string name="empty_food_rv_text">
+        No data to display.\nTry adding a food using the plus button.
+    </string>
+
+    <!-- Diary Fragment -->
+    <string name="add_diary_fab_desc">Add a Diary Entry</string>
+    <string name="empty_diary_rv_text">No data to display.\nTry adding a diary entry using the plus button.</string>
+
+    <!-- Top Toolbar -->
+    <string name="open_settings_title">Settings</string>
+
+    <!-- Preference Headers -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="database_header">Database</string>
+
+    <!-- Database Preferences -->
+    <string name="clear_db_title">Clear Database</string>
+    <string name="clear_db_summary">Delete all data from the database</string>
+    <string name="clear_db_message">Cleared all tables</string>
+    <string name="clear_db_confirmation_dialog">Are you sure you want to delete all database entries?</string>
+
+    <!-- Miscellaneous Strings -->
+    <string name="todo">TODO</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="search">Search</string>
+    <string name="new_food_button">New Food</string> // not sure where this is used
+
 </resources>
