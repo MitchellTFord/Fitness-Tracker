@@ -20,8 +20,7 @@ public class DiaryEntry {
 	private Date date;
 
 	public DiaryEntry(Date date) {
-		Random rand = new Random();
-		this.setId(rand.nextLong());
+		this.id = new Random().nextLong();
 		this.setDate(date);
 	}
 

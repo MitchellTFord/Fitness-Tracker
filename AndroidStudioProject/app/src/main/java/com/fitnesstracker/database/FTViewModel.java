@@ -60,6 +60,28 @@ public class FTViewModel extends AndroidViewModel {
 					}
 				}
 		);
+
+		mealSearchKey = new MutableLiveData<>();
+		meals = Transformations.switchMap(
+				mealSearchKey,
+				new Function<DiaryEntry, LiveData<List<FoodServingTuple>>>() {
+					@Override public LiveData<List<FoodServingTuple>> apply(final DiaryEntry diaryEntry) {
+						final AtomicReference<LiveData<List<FoodServingTuple>>> result = new AtomicReference<>();
+
+						executor.execute(new Runnable() {
+							@Override public void run() {
+								if(diaryEntry == null) {
+									result.set(dao.getFoodsFromAllDiaries());
+								} else {
+									result.set(dao.getFoodsFromDiary(diaryEntry));
+								}
+							}
+						});
+
+						return result.get();
+					}
+				}
+		);
 	}
 
 	public void clearAllTables() {
@@ -242,17 +264,6 @@ public class FTViewModel extends AndroidViewModel {
 	}
 
 	public LiveData<List<FoodServingTuple>> getMealsFromDiary() {
-		meals = Transformations.switchMap(mealSearchKey, new Function<DiaryEntry, LiveData<List<FoodServingTuple>>>() {
-			@Override public LiveData<List<FoodServingTuple>> apply(final DiaryEntry diaryEntry) {
-				final AtomicReference<LiveData<List<FoodServingTuple>>> tuples = new AtomicReference<>();
-				executor.execute(new Runnable() {
-					@Override public void run() {
-						tuples.set(dao.getFoodsFromDiary(diaryEntry));
-					}
-				});
-				return tuples.get();
-			}
-		});
 		return meals;
 	}
 

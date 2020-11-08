@@ -134,6 +134,14 @@ public abstract class FTDao {
 			       "AND diary_entry.id = :diaryEntryID")
 	public abstract LiveData<List<FoodServingTuple>> getFoodsFromDiary(long diaryEntryID);
 
+	@NotNull
+	@Transaction
+	@Query("SELECT food.*, diary_food.num_servings as numServings " +
+			       "FROM food, diary_entry, diary_food " +
+			       "WHERE food.id = diary_food.food_id " +
+			       "AND diary_entry.id = diary_food.diary_entry_id")
+	public abstract LiveData<List<FoodServingTuple>> getFoodsFromAllDiaries();
+
 	/**
 	 * Get a list of foods and numbers of servings associated with a diary entry.
 	 *

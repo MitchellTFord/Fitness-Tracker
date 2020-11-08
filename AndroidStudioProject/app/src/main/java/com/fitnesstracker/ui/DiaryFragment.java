@@ -70,28 +70,33 @@ public class DiaryFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		// Get a view model
 		viewModel = ViewModelProviders.of(requireActivity()).get(FTViewModel.class);
 
+		// Set up the RecyclerView
 		RecyclerView rv = (RecyclerView) view.findViewById(R.id.diary_recycler_view);
+		rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+		// Set up the RecyclerView adapter
 		final DiaryEntryAdapter adapter = new DiaryEntryAdapter(viewModel);
 		adapter.setEmptyRVHandler(new EmptyRVHandler() {
 			@Override public void handleEmptyRV(boolean isEmpty) {
 				requireView().findViewById(R.id.diary_rv_empty_text)
 						.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+				System.out.println("Visible: " + (isEmpty ? View.VISIBLE : View.GONE));
 			}
 		});
-		rv.setAdapter(adapter);
 
-		rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-		viewModel.getAllDiaryEntries().observeForever(new Observer<List<DiaryEntry>>() {
+		// Observe database changes
+		viewModel.getAllDiaryEntries().observe(getViewLifecycleOwner(), new Observer<List<DiaryEntry>>() {
 			@Override
 			public void onChanged(List<DiaryEntry> diaryEntries) {
 				System.out.println("Diary Data Changed");
 				adapter.setData(diaryEntries);
 			}
 		});
+
+		rv.setAdapter(adapter);
 
 		// Set up the floating action button for adding new foods
 		addDiaryEntryFAB = view.findViewById(R.id.add_diary_entry_fab);
@@ -116,8 +121,8 @@ public class DiaryFragment extends Fragment {
 					viewModel.insert(food);
 					DiaryEntry diaryEntry = new DiaryEntry(new Date(System.currentTimeMillis()));
 					viewModel.insert(diaryEntry);
-					Thread.sleep(25);
-					viewModel.insert(diaryEntry, food, 1);
+					Thread.sleep(100);
+					viewModel.insert(new DiaryEntryFoodCrossRef(diaryEntry, food, 1));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

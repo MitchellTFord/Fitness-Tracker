@@ -21,7 +21,7 @@ import java.util.List;
 
 public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.ViewHolder> {
 
-	private FTViewModel viewModel;
+	private final FTViewModel viewModel;
 
 	private EmptyRVHandler emptyRVHandler;
 
@@ -43,12 +43,13 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 		return viewHolder;
 	}
 
-	@Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+	@Override
+	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		DiaryEntry diaryEntry = data.get(position);
 
 		RecyclerView rv = holder.rv;
 		rv.setLayoutManager(new LinearLayoutManager(holder.rv.getContext()));
-		final DiaryEntryFoodAdapter adapter = new DiaryEntryFoodAdapter(diaryEntry);
+		final DiaryEntryFoodAdapter adapter = new DiaryEntryFoodAdapter(diaryEntry, viewModel);
 		rv.setLayoutManager(new LinearLayoutManager(holder.rv.getContext()));
 		rv.setAdapter(adapter);
 		viewModel.getMealsFromDiary(diaryEntry).observeForever(new Observer<List<FoodServingTuple>>() {
