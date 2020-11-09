@@ -87,7 +87,7 @@ public class FoodFragment extends Fragment {
 		});
 
 		// Observe database changes
-		viewModel.getAllFoods().observe(getViewLifecycleOwner(), new Observer<List<Food>>() {
+		viewModel.getFoods().observe(getViewLifecycleOwner(), new Observer<List<Food>>() {
 			@Override public void onChanged(List<Food> foods) {
 				adapter.setData(foods);
 			}

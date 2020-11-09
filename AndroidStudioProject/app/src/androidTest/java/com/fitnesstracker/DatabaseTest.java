@@ -7,7 +7,6 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.fitnesstracker.database.DiaryEntry;
-import com.fitnesstracker.database.DiaryEntryFoodCrossRef;
 import com.fitnesstracker.database.FTDao;
 import com.fitnesstracker.database.FTDatabase;
 import com.fitnesstracker.database.Food;
@@ -40,7 +39,7 @@ public class DatabaseTest {
 	public void createDB() {
 		Context context = ApplicationProvider.getApplicationContext();
 		db = Room.inMemoryDatabaseBuilder(context, FTDatabase.class).build();
-		dao = db.ftDao();
+		dao = db.getDao();
 	}
 
 	@After

@@ -6,13 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
+import com.fitnesstracker.ui.DiaryEntryAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 /**
  * A layer of abstraction between the Room database and the user interface.
@@ -23,65 +30,61 @@ public class FTViewModel extends AndroidViewModel {
 	private final FTDatabase db;
 	private final ExecutorService executor;
 
-	private LiveData<List<Food>> food;
+	private final MutableLiveData<String> foodSearchKey;
+	private final LiveData<List<Food>> foods;
 
-	private final MutableLiveData<Date> diaryEntryDateSearchKey;
-	private final LiveData<List<DiaryEntry>> diaryEntries;
+	private final MutableLiveData<Long> foodDiaryEntrySearchKey;
+	private final LiveData<List<FoodDiaryEntry>> foodDiaryEntries;
 
-	private LiveData<List<DiaryEntryFoodCrossRef>> diaryEntryFoodCrossRefs;
-
-	private MutableLiveData<DiaryEntry> mealSearchKey;
-	private LiveData<List<FoodServingTuple>> meals;
+	private final MediatorLiveData<List<FoodDiaryEntry>> mealTrigger;
+	private final LiveData<List<Meal>> meals;
 
 	public FTViewModel(@NonNull Application application) {
 		super(application);
 		db = FTDatabase.getDatabase(application);
-		dao = db.ftDao();
-		executor = FTDatabase.executor;
+		dao = db.getDao();
+		executor = FTDatabase.getExecutor();
 
-		diaryEntryDateSearchKey = new MutableLiveData<>(new Date(System.nanoTime()));
-		diaryEntries = Transformations.switchMap(
-				diaryEntryDateSearchKey,
-				new Function<Date, LiveData<List<DiaryEntry>>>() {
-					@Override public LiveData<List<DiaryEntry>> apply(final Date date) {
-						final AtomicReference<LiveData<List<DiaryEntry>>> result = new AtomicReference<>();
-
-						executor.execute(new Runnable() {
-							@Override public void run() {
-								if(date == null) {
-									result.set(dao.getAllDiaryEntries());
-								} else {
-									result.set(dao.getDiaryEntries(date));
-								}
-							}
-						});
-
-						return result.get();
-					}
+		foodSearchKey = new MutableLiveData<>(null);
+		foods = Transformations.switchMap(foodSearchKey, new Function<String, LiveData<List<Food>>>() {
+			@Override public LiveData<List<Food>> apply(String name) {
+				if (name == null) {
+					return dao.getAllFoods();
+				} else {
+					return dao.getFood(name);
 				}
-		);
+			}
+		});
 
-		mealSearchKey = new MutableLiveData<>();
-		meals = Transformations.switchMap(
-				mealSearchKey,
-				new Function<DiaryEntry, LiveData<List<FoodServingTuple>>>() {
-					@Override public LiveData<List<FoodServingTuple>> apply(final DiaryEntry diaryEntry) {
-						final AtomicReference<LiveData<List<FoodServingTuple>>> result = new AtomicReference<>();
-
-						executor.execute(new Runnable() {
-							@Override public void run() {
-								if(diaryEntry == null) {
-									result.set(dao.getFoodsFromAllDiaries());
-								} else {
-									result.set(dao.getFoodsFromDiary(diaryEntry));
-								}
-							}
-						});
-
-						return result.get();
-					}
+		foodDiaryEntrySearchKey = new MutableLiveData<>(null);
+		foodDiaryEntries = Transformations.switchMap(foodDiaryEntrySearchKey, new Function<Long, LiveData<List<FoodDiaryEntry>>>() {
+			@Override public LiveData<List<FoodDiaryEntry>> apply(Long time) {
+				if (time == null || time == 0) {
+					return dao.getAllFoodDiaryEntries();
+				} else {
+					return dao.getFoodDiaryEntries(time, time + 86_400_000);
 				}
-		);
+			}
+		});
+
+		mealTrigger = new MediatorLiveData<>();
+		mealTrigger.addSource(foodDiaryEntries, new Observer<List<FoodDiaryEntry>>() {
+			@Override public void onChanged(List<FoodDiaryEntry> foodDiaryEntries) {
+				mealTrigger.setValue(foodDiaryEntries);
+			}
+		});
+		mealTrigger.addSource(foods, new Observer<List<Food>>() {
+			@Override public void onChanged(List<Food> foods) {
+				// Refresh on food table update
+				mealTrigger.setValue(mealTrigger.getValue());
+			}
+		});
+
+		meals = Transformations.switchMap(mealTrigger, new Function<List<FoodDiaryEntry>, LiveData<List<Meal>>>() {
+			@Override public LiveData<List<Meal>> apply(List<FoodDiaryEntry> foodDiaryEntries) {
+				return createMeals(foodDiaryEntries);
+			}
+		});
 	}
 
 	public void clearAllTables() {
@@ -92,28 +95,8 @@ public class FTViewModel extends AndroidViewModel {
 		});
 	}
 
-	public LiveData<List<Food>> getAllFoods() {
-		return dao.getAllFoods();
-	}
-
-	public LiveData<Food> getFood(final long id) {
-		final AtomicReference<LiveData<Food>> food = new AtomicReference<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				food.set(dao.getFood(id));
-			}
-		});
-		return food.get();
-	}
-
-	public LiveData<List<Food>> getFoods(final String name) {
-		final AtomicReference<LiveData<List<Food>>> foods = new AtomicReference<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				foods.set(dao.getFood(name));
-			}
-		});
-		return foods.get();
+	public LiveData<List<Food>> getFoods() {
+		return foods;
 	}
 
 	public void insert(final Food... foods) {
@@ -158,121 +141,95 @@ public class FTViewModel extends AndroidViewModel {
 		return numDeletes.get();
 	}
 
-	/**
-	 * Get all diary entries from the database.
-	 *
-	 * @return all diary entries from the database
-	 */
-	public LiveData<List<DiaryEntry>> getAllDiaryEntries() {
-		return getDiaryEntries(null);
-	}
-
-//	/**
-//	 * Get the diary entry with the given id.
-//	 *
-//	 * @param id the id of the diary entry to get
-//	 *
-//	 * @return the diary entry with the matching id
-//	 */
-//	public LiveData<DiaryEntry> getDiaryEntry(final long id) {
-//		final AtomicReference<LiveData<DiaryEntry>> diaryEntry = new AtomicReference<>();
-//		executor.execute(new Runnable() {
-//			@Override public void run() {
-//				diaryEntry.set(dao.getDiaryEntry(id));
-//			}
-//		});
-//		return diaryEntry.get();
-//	}
-
-	/**
-	 * Get all diary entries matching the current search key {@link FTViewModel#diaryEntryDateSearchKey}.
-	 * <p>
-	 * The search key is altered using {@link FTViewModel#setDiaryEntryDateSearchKey(Date)}.
-	 *
-	 * @return a list of diary entries matching the current search key
-	 */
-	public LiveData<List<DiaryEntry>> getDiaryEntries() {
-		return diaryEntries;
+	public void insert(final FoodDiaryEntry... foodDiaryEntries) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				dao.insert(foodDiaryEntries);
+			}
+		});
 	}
 
 	/**
-	 * Get all diary entries that occur on a given date.
-	 * <p>
-	 * If null is passed in, get all diary entries.
+	 * Update one or more meals in the database.
 	 *
-	 * @param date the date to search for
+	 * @param foodDiaryEntries one or more meals objects to update
 	 *
-	 * @return a list of diary entries occurring on the given date
+	 * @return the number of items updated
 	 */
-	public LiveData<List<DiaryEntry>> getDiaryEntries(final Date date) {
-		setDiaryEntryDateSearchKey(date);
-		return getDiaryEntries();
-	}
-
-	public void setDiaryEntryDateSearchKey(Date searchKey) {
-		diaryEntryDateSearchKey.setValue(searchKey);
-	}
-
-	public int update(final DiaryEntry... diaryEntries) {
+	public int update(final FoodDiaryEntry... foodDiaryEntries) {
 		final AtomicReference<Integer> numUpdates = new AtomicReference<>();
 		executor.execute(new Runnable() {
 			@Override public void run() {
-				numUpdates.set(dao.delete(diaryEntries));
+				numUpdates.set(dao.update(foodDiaryEntries));
 			}
 		});
 		return numUpdates.get();
 	}
 
-	public int delete(final DiaryEntry... diaryEntry) {
+	/**
+	 * Delete one or more meals from the database.
+	 *
+	 * @param foodDiaryEntries one or more meals objects to delete
+	 *
+	 * @return the number of items deleted
+	 */
+	public int delete(final FoodDiaryEntry... foodDiaryEntries) {
 		final AtomicReference<Integer> numDeletes = new AtomicReference<>();
 		executor.execute(new Runnable() {
 			@Override public void run() {
-				numDeletes.set(dao.delete(diaryEntry));
+				numDeletes.set(dao.delete(foodDiaryEntries));
 			}
 		});
 		return numDeletes.get();
 	}
 
-	public void insert(final DiaryEntry diaryEntry) {
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				dao.insert(diaryEntry);
-			}
-		});
+	public void setFoodDiaryEntrySearchKey(long time) {
+		foodDiaryEntrySearchKey.setValue(time);
 	}
 
-	public void insert(DiaryEntry diaryEntry, Food food, double numServings) {
-		insert(new DiaryEntryFoodCrossRef(diaryEntry, food, numServings));
+	public LiveData<List<FoodDiaryEntry>> getFoodDiaryEntries() {
+		return foodDiaryEntries;
 	}
 
-	public void insert(final DiaryEntryFoodCrossRef diaryEntryFoodCrossRef) {
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				dao.insert(diaryEntryFoodCrossRef);
-			}
-		});
+	public void setFoodSearchKey(String foodSearchKey) {
+		this.foodSearchKey.setValue(foodSearchKey);
 	}
 
-	public int update(final DiaryEntryFoodCrossRef diaryEntryFoodCrossRef) {
-		final AtomicReference<Integer> numUpdates = new AtomicReference<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				numUpdates.set(dao.update(diaryEntryFoodCrossRef));
-			}
-		});
-		return numUpdates.get();
-	}
-
-	public LiveData<List<FoodServingTuple>> getMealsFromDiary() {
+	public LiveData<List<Meal>> getMeals() {
 		return meals;
 	}
 
-	public LiveData<List<FoodServingTuple>> getMealsFromDiary(final DiaryEntry diaryEntry) {
-		setMealSearchKey(diaryEntry);
-		return getMealsFromDiary();
+	private MutableLiveData<List<Meal>> createMeals(final List<FoodDiaryEntry> foodDiaryEntries) {
+		final List<Meal> meals = new ArrayList<>();
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				for(FoodDiaryEntry foodDiaryEntry : foodDiaryEntries) {
+					meals.add(new Meal(
+							foodDiaryEntry.getId(),
+							dao.getFood(foodDiaryEntry.getFoodId()),
+							foodDiaryEntry.getNumServings(),
+							foodDiaryEntry.getTime()));
+				}
+			}
+		});
+		return new MutableLiveData<>(meals);
 	}
 
-	public void setMealSearchKey(DiaryEntry mealSearchKey) {
-		this.mealSearchKey.setValue(mealSearchKey);
+	public void makeSampleMeal() {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					Food food = Food.makeRandom();
+					dao.insert(food);
+
+					Thread.sleep(50);
+
+					Meal meal = new Meal(food, 1, System.currentTimeMillis());
+					dao.insert(meal.getDiaryEntry());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

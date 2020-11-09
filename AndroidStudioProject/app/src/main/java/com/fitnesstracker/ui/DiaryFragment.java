@@ -16,11 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.fitnesstracker.R;
-import com.fitnesstracker.database.DiaryEntry;
-import com.fitnesstracker.database.DiaryEntryFoodCrossRef;
 import com.fitnesstracker.database.FTDatabase;
 import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.Meal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -78,7 +77,7 @@ public class DiaryFragment extends Fragment {
 		rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 		// Set up the RecyclerView adapter
-		final DiaryEntryAdapter adapter = new DiaryEntryAdapter(viewModel);
+		final DiaryEntryAdapter adapter = new DiaryEntryAdapter();
 		adapter.setEmptyRVHandler(new EmptyRVHandler() {
 			@Override public void handleEmptyRV(boolean isEmpty) {
 				requireView().findViewById(R.id.diary_rv_empty_text)
@@ -88,11 +87,10 @@ public class DiaryFragment extends Fragment {
 		});
 
 		// Observe database changes
-		viewModel.getAllDiaryEntries().observe(getViewLifecycleOwner(), new Observer<List<DiaryEntry>>() {
-			@Override
-			public void onChanged(List<DiaryEntry> diaryEntries) {
-				System.out.println("Diary Data Changed");
-				adapter.setData(diaryEntries);
+		viewModel.getMeals().observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
+			@Override public void onChanged(List<Meal> meals) {
+				adapter.setData(meals);
+				System.out.println("Diary data changed.");
 			}
 		});
 
@@ -111,22 +109,6 @@ public class DiaryFragment extends Fragment {
 	}
 
 	public void generateSampleData() {
-		FTDatabase.executor.execute(new Runnable() {
-			@Override public void run() {
-				try {
-					// The Thread.sleep() calls are needed
-					// because of the race condition that
-					// our threading configuration causes
-					Food food = Food.makeRandom();
-					viewModel.insert(food);
-					DiaryEntry diaryEntry = new DiaryEntry(new Date(System.currentTimeMillis()));
-					viewModel.insert(diaryEntry);
-					Thread.sleep(100);
-					viewModel.insert(new DiaryEntryFoodCrossRef(diaryEntry, food, 1));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		viewModel.makeSampleMeal();
 	}
 }
