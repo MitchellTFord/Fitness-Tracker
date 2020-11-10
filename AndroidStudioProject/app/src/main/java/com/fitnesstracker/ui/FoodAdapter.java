@@ -13,13 +13,16 @@ import com.fitnesstracker.R;
 import com.fitnesstracker.database.Food;
 
 import java.util.List;
+import java.util.Locale;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
-	private List<Food> dataset;
+	private List<Food> data;
 
-	public FoodAdapter(List<Food> dataset) {
-		setDataset(dataset);
+	private EmptyRVHandler emptyRVHandler;
+
+	public FoodAdapter(List<Food> data) {
+		setData(data);
 	}
 
 	@NonNull
@@ -36,26 +39,41 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-		Food food = dataset.get(position);
+		Food food = data.get(position);
 
 		TextView nameTextView = holder.nameTextView;
 		nameTextView.setText(food.getName());
 
 		TextView servingInfoTextView = holder.servingInfoTextView;
-		servingInfoTextView.setText(String.format("%.2f %s", food.getServingSize(), food.getServingUnit()));
+		servingInfoTextView.setText(String.format(Locale.getDefault(),
+				"%.2f %s",
+				food.getServingSize(),
+				food.getServingUnit())
+		);
 	}
 
 	@Override
 	public int getItemCount() {
-		return dataset.size();
+		return data.size();
 	}
 
-	public void setDataset(List<Food> dataset) {
-		this.dataset = dataset;
+	public void setData(List<Food> data) {
+		this.data = data;
+		handleEmpty();
 		notifyDataSetChanged();
 	}
 
-	public class ViewHolder extends RecyclerView.ViewHolder {
+	public void setEmptyRVHandler(EmptyRVHandler emptyRVHandler) {
+		this.emptyRVHandler = emptyRVHandler;
+	}
+
+	public void handleEmpty() {
+		if (emptyRVHandler != null) {
+			emptyRVHandler.handleEmptyRV(data == null || data.isEmpty());
+		}
+	}
+
+	public static class ViewHolder extends RecyclerView.ViewHolder {
 
 		public TextView nameTextView;
 		public TextView servingInfoTextView;

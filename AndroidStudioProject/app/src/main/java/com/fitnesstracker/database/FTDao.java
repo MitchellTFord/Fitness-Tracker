@@ -30,7 +30,7 @@ public abstract class FTDao {
 	 */
 	@NotNull
 	@Query("SELECT * FROM Food WHERE Food.id = :id")
-	public abstract LiveData<Food> getFood(long id);
+	public abstract Food getFood(long id);
 
 	@NotNull
 	@Query("SELECT * FROM Food WHERE Food.name LIKE :name")
@@ -74,91 +74,64 @@ public abstract class FTDao {
 	public abstract int delete(@NotNull Food... food);
 
 	/**
-	 * Insert {@link DiaryEntry} objects into the database.
+	 * Insert {@link FoodDiaryEntry} objects into the database.
 	 *
-	 * @param diaryEntry one or more DiaryEntry objects to insert
+	 * @param foodDiaryEntries one or more Food objects to insert into the database
 	 */
-	@Insert(entity = DiaryEntry.class)
-	public abstract void insert(@NotNull DiaryEntry... diaryEntry);
+	@Insert(entity = FoodDiaryEntry.class)
+	public abstract void insert(@NotNull FoodDiaryEntry... foodDiaryEntries);
 
 	/**
-	 * Update one ore more {@link DiaryEntry} objects in the database.
+	 * Update {@link FoodDiaryEntry} objects in the database.
 	 *
-	 * @param diaryEntry one or more DiaryEntry objects to update
+	 * @param foodDiaryEntries one or more Food objects to update
 	 *
 	 * @return the number of rows that were updated
 	 */
-	@Update(entity = DiaryEntry.class)
-	public abstract int update(@NotNull DiaryEntry... diaryEntry);
+	@Update(entity = FoodDiaryEntry.class)
+	public abstract int update(@NotNull FoodDiaryEntry... foodDiaryEntries);
 
 	/**
-	 * Delete one ore more {@link DiaryEntry} objects from the database.
+	 * Delete {@link FoodDiaryEntry} objects from the database.
 	 *
-	 * @param diaryEntry one or more DiaryEntry objects to delete
+	 * @param foodDiaryEntries one or more Food objects to delete
 	 *
 	 * @return the number of rows that were deleted
 	 */
-	@Delete(entity = DiaryEntry.class)
-	public abstract int delete(@NotNull DiaryEntry... diaryEntry);
+	@Delete(entity = FoodDiaryEntry.class)
+	public abstract int delete(@NotNull FoodDiaryEntry... foodDiaryEntries);
 
-	@Nullable
-	@Query("SELECT * FROM diary_entry WHERE diary_entry.id = :id")
-	public abstract LiveData<DiaryEntry> getDiaryEntry(long id);
+	@Query("SELECT * " +
+			       "FROM diary_food D " +
+			       "ORDER BY D.time DESC")
+	public abstract LiveData<List<FoodDiaryEntry>> getAllFoodDiaryEntries();
 
-	@NotNull
-	@Query("SELECT * FROM diary_entry WHERE diary_entry.date = :date")
-	public abstract LiveData<List<DiaryEntry>> getDiaryEntries(Date date);
+	@Query("SELECT * " +
+			       "FROM diary_food D " +
+			       "WHERE D.time >= :startTime AND D.time < :endTime " +
+			       "ORDER BY D.time DESC")
+	public abstract LiveData<List<FoodDiaryEntry>> getFoodDiaryEntries(long startTime, long endTime);
 
-	/**
-	 * Query the database for a {@link List} of all the diary entries it has.
-	 *
-	 * @return a list of all the diary entries in the database
-	 */
-	@NotNull
-	@Query("SELECT * FROM diary_entry")
-	public abstract LiveData<List<DiaryEntry>> getAllDiaryEntries();
+	@Query("SELECT * " +
+			       "FROM diary_food D " +
+			       "WHERE D.time >= :startTime AND D.time < :endTime " +
+			       "ORDER BY D.time DESC")
+	public abstract List<FoodDiaryEntry> getFoodDiaryEntriesRaw(long startTime, long endTime);
 
-	/**
-	 * Get a list of foods and numbers of servings associated with a diary entry by its ID.
-	 *
-	 * @param diaryEntryID the id of the diary entry to get the foods of
-	 *
-	 * @return a list of {@link FoodServingTuple} objects associated with this diary entry
-	 */
-	@NotNull
-	@Transaction
-	@Query("SELECT food.*, diary_food.num_servings as numServings " +
-			       "FROM food, diary_entry, diary_food " +
-			       "WHERE food.id = diary_food.food_id " +
-			       "AND diary_entry.id = diary_food.diary_entry_id " +
-			       "AND diary_entry.id = :diaryEntryID")
-	public abstract LiveData<List<FoodServingTuple>> getFoodsFromDiary(long diaryEntryID);
+	@Query("SELECT D.id AS id, F.*, D.num_servings, D.time " +
+			       "FROM diary_food D, food F " +
+			       "WHERE D.time >= :startTime AND D.time < :endTime " +
+			       "AND D.food_id = F.id " +
+			       "ORDER BY D.time DESC")
+	public abstract LiveData<List<Meal>> getMeals(long startTime, long endTime);
 
-	/**
-	 * Get a list of foods and numbers of servings associated with a diary entry.
-	 *
-	 * @param diaryEntry the diary entry to get the foods of
-	 *
-	 * @return a list of {@link FoodServingTuple} objects associated with this diary entry
-	 */
-	@NotNull
-	public LiveData<List<FoodServingTuple>> getFoodsFromDiary(@NotNull DiaryEntry diaryEntry) {
-		return getFoodsFromDiary(diaryEntry.getId());
-	}
+	@Query("SELECT * " +
+			       "FROM diary_food D, food F " +
+			       "WHERE D.food_id = F.id " +
+			       "ORDER BY D.time DESC")
+	public abstract LiveData<List<Meal>> getAllMeals();
 
-	@Insert(entity = DiaryEntryFoodCrossRef.class)
-	public abstract void insert(@NotNull DiaryEntryFoodCrossRef... diaryEntryFoodCrossRef);
-
-	@Update(entity = DiaryEntryFoodCrossRef.class)
-	public abstract int update(@NotNull DiaryEntryFoodCrossRef... diaryEntryFoodCrossRef);
-
-	@Delete(entity = DiaryEntryFoodCrossRef.class)
-	public abstract int delete(@NotNull DiaryEntryFoodCrossRef... diaryEntryFoodCrossRef);
-
-	@Query("SELECT * FROM diary_food")
-	public abstract LiveData<List<DiaryEntryFoodCrossRef>> getAllDiaryEntryFoodCrossRef();
-
-	public void addDiaryEntry(DiaryEntry diaryEntry, Food food, double numServings) {
-		insert(new DiaryEntryFoodCrossRef(diaryEntry, food, numServings));
+	public Meal getMeal(FoodDiaryEntry foodDiaryEntry) {
+		return getMeal(foodDiaryEntry);
 	}
 }

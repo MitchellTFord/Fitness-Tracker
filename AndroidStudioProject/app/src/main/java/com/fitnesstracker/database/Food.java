@@ -121,7 +121,9 @@ public class Food {
 	}
 
 	public void setServingSize(double servingSize) {
-		assert servingSize >= 0 : "Serving size must be greater than or equal to zero";
+		if (servingSize < 0) {
+			throw new IllegalArgumentException("Serving size must be greater than or equal to zero");
+		}
 		this.servingSize = servingSize;
 	}
 
