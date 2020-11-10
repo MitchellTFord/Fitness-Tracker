@@ -22,6 +22,7 @@
     <!-- Diary Fragment -->
     <string name="add_diary_fab_desc">Add a Diary Entry</string>
     <string name="empty_diary_rv_text">No data to display.\nTry adding a diary entry using the plus button.</string>
+    <string name="diary_time_format">MM/dd/yy HH:mm</string>
 
     <!-- Top Toolbar -->
     <string name="open_settings_title">Settings</string>

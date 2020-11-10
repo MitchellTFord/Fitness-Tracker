@@ -16,11 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.fitnesstracker.R;
-import com.fitnesstracker.database.DiaryEntry;
-import com.fitnesstracker.database.DiaryEntryFoodCrossRef;
 import com.fitnesstracker.database.FTDatabase;
 import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.Meal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -70,24 +69,32 @@ public class DiaryFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		// Get a view model
 		viewModel = ViewModelProviders.of(requireActivity()).get(FTViewModel.class);
 
+		// Set up the RecyclerView
 		RecyclerView rv = (RecyclerView) view.findViewById(R.id.diary_recycler_view);
-		final DiaryEntryAdapter adapter = new DiaryEntryAdapter(viewModel);
+		rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+		// Set up the RecyclerView adapter
+		final DiaryEntryAdapter adapter = new DiaryEntryAdapter();
 		adapter.setEmptyRVHandler(new EmptyRVHandler() {
 			@Override public void handleEmptyRV(boolean isEmpty) {
 				requireView().findViewById(R.id.diary_rv_empty_text)
 						.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+				System.out.println("Visible: " + (isEmpty ? View.VISIBLE : View.GONE));
 			}
 		});
+
+		// Observe database changes
+		viewModel.getMeals().observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
+			@Override public void onChanged(List<Meal> meals) {
+				adapter.setData(meals);
+				System.out.println("Diary data changed.");
+			}
+		});
+
 		rv.setAdapter(adapter);
-		rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-		viewModel.getDiaryEntries().observeForever(new Observer<List<DiaryEntry>>() {
-			@Override
-			public void onChanged(List<DiaryEntry> diaryEntries) {
-				adapter.setData(diaryEntries);
-			}
-		});
 
 		// Set up the floating action button for adding new foods
 		addDiaryEntryFAB = view.findViewById(R.id.add_diary_entry_fab);
@@ -102,22 +109,6 @@ public class DiaryFragment extends Fragment {
 	}
 
 	public void generateSampleData() {
-		FTDatabase.executor.execute(new Runnable() {
-			@Override public void run() {
-				try {
-					// The Thread.sleep() calls are needed
-					// because of the race condition that
-					// our threading configuration causes
-					Food food = Food.makeRandom();
-					viewModel.insert(food);
-					DiaryEntry diaryEntry = new DiaryEntry(new Date(System.currentTimeMillis()));
-					viewModel.insert(diaryEntry);
-					Thread.sleep(25);
-					viewModel.insert(diaryEntry, food, 1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		viewModel.makeSampleMeal();
 	}
 }

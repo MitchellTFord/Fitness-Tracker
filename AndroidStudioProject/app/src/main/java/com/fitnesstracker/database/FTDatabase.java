@@ -10,16 +10,16 @@ import androidx.room.TypeConverters;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Food.class, DiaryEntry.class, DiaryEntryFoodCrossRef.class},
+@Database(entities = {Food.class, FoodDiaryEntry.class},
           version = 1,
           exportSchema = false)
-@TypeConverters({DatabaseTypeConverters.class})
+@TypeConverters(FTTypeConverters.class)
 public abstract class FTDatabase extends RoomDatabase {
-	public abstract FTDao ftDao();
+	public abstract FTDao getDao();
 
 	private static volatile FTDatabase INSTANCE;
 	private static final int NUMBER_OF_THREADS = 4;
-	public static final ExecutorService executor =
+	private static final ExecutorService executor =
 			Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
 	public static FTDatabase getDatabase(final Context context) {
@@ -30,5 +30,9 @@ public abstract class FTDatabase extends RoomDatabase {
 			}
 		}
 		return INSTANCE;
+	}
+
+	public static ExecutorService getExecutor() {
+		return executor;
 	}
 }
