@@ -1,4 +1,4 @@
-package com.fitnesstracker;
+package com.fitnesstracker.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.fitnesstracker.R;
 import com.fitnesstracker.ui.MainActivity;
 
 public class AddMeal extends AppCompatActivity {

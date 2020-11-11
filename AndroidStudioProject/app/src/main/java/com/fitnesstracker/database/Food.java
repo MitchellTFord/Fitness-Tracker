@@ -80,6 +80,21 @@ public class Food {
 		return food;
 	}
 
+	// Create a list of basic foods for the user to pick from
+	public static Food[] addFoodToList(){
+		Food[] foodList = new Food[SAMPLE_NAMES.length];
+		for(int i = 0; i < SAMPLE_NAMES.length; i++){
+			Food food = new Food(
+					SAMPLE_NAMES[i],
+					"grams",
+					1.0
+			);
+			food.setNutritionInfo(NutritionInfo.makeRandom());
+			foodList[i] = food;
+		}
+		return foodList;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

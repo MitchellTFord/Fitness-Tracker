@@ -25,6 +25,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+	public static final String EXTRA_MESSAGE = "Hello message";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 		NavController navController = navHostFragment.getNavController();
 		BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 		NavigationUI.setupWithNavController(bottomNav, navController);
+
+
 
 		//AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.diary_page, R.id.food_page, R.id.exercise_page).build();
 	}
