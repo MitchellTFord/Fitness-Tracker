@@ -201,6 +201,10 @@ public class FTViewModel extends AndroidViewModel {
 
 	private MutableLiveData<List<Meal>> createMeals(final List<FoodDiaryEntry> foodDiaryEntries) {
 		final List<Meal> meals = new ArrayList<>();
+		if(foodDiaryEntries == null) {
+			return new MutableLiveData<>(meals);
+		}
+
 		executor.execute(new Runnable() {
 			@Override public void run() {
 				for(FoodDiaryEntry foodDiaryEntry : foodDiaryEntries) {
