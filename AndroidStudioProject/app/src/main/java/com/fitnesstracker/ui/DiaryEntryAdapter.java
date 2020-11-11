@@ -16,6 +16,8 @@ import com.fitnesstracker.database.Meal;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +53,9 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 		));
 
 		holder.timeInfoText.setText("time");
-		holder.timeInfoText.setText(DateTimeFormatter
-				.ofPattern("MM/dd/yy HH:mm")
-				.toFormat()
-				.format(meal.getTimeAsDate()));
+
+		holder.timeInfoText.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(meal.getTimeAsDate()));
+
 	}
 
 	@Override
