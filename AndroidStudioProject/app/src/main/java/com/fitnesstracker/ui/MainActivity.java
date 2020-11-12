@@ -21,13 +21,18 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.fitnesstracker.R;
+import com.fitnesstracker.database.Food;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    // for testing
 	public static final String EXTRA_MESSAGE = "Hello message";
 
-	@Override
+	// Initialize list of foods for user to pick from
+	public static final Food[] foodList =  Food.addFoodToList();
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -42,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 		NavController navController = navHostFragment.getNavController();
 		BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 		NavigationUI.setupWithNavController(bottomNav, navController);
-
 
 
 		//AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.diary_page, R.id.food_page, R.id.exercise_page).build();
