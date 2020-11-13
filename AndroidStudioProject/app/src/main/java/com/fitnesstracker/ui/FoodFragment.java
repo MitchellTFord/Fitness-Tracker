@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -79,17 +80,14 @@ public class FoodFragment extends Fragment {
 
 		// Set up the RecyclerView adapter
 		final FoodAdapter adapter = new FoodAdapter(new ArrayList<Food>());
-		adapter.setEmptyRVHandler(new EmptyRVHandler() {
-			@Override public void handleEmptyRV(boolean isEmpty) {
-				requireView().findViewById(R.id.food_rv_empty_text)
-						.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-			}
-		});
+
+		final TextView noDataTextView = requireView().findViewById(R.id.food_rv_empty_text);
 
 		// Observe database changes
 		viewModel.getFoods().observe(getViewLifecycleOwner(), new Observer<List<Food>>() {
 			@Override public void onChanged(List<Food> foods) {
 				adapter.setData(foods);
+				noDataTextView.setVisibility(foods == null || foods.isEmpty() ? View.VISIBLE : View.GONE);
 			}
 		});
 

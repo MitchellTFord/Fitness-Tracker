@@ -25,8 +25,6 @@ import java.util.Locale;
 
 public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.ViewHolder> {
 
-	private EmptyRVHandler emptyRVHandler;
-
 	private List<Meal> data = new ArrayList<>();
 
 	@NonNull
@@ -64,18 +62,7 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 
 	public void setData(List<Meal> data) {
 		this.data = data;
-		handleEmpty();
 		notifyDataSetChanged();
-	}
-
-	public void handleEmpty() {
-		if (emptyRVHandler != null) {
-			emptyRVHandler.handleEmptyRV(data == null || data.isEmpty());
-		}
-	}
-
-	public void setEmptyRVHandler(EmptyRVHandler emptyRVHandler) {
-		this.emptyRVHandler = emptyRVHandler;
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
