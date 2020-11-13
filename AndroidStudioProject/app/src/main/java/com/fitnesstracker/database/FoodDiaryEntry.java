@@ -43,6 +43,11 @@ public class FoodDiaryEntry {
 		this(generateId(), foodId, numServings, time);
 	}
 
+	@Ignore
+	public FoodDiaryEntry(Food food, double numServings, long time) {
+		this(generateId(), food.getId(), numServings, time);
+	}
+
 	public static long generateId() {
 		return new Random().nextLong();
 	}
@@ -77,6 +82,16 @@ public class FoodDiaryEntry {
 
 	public void setTime(long time) {
 		this.time = time;
+	}
+
+	@Override
+	public String toString() {
+		return "FoodDiaryEntry{" +
+				"id=" + id +
+				", foodId=" + foodId +
+				", numServings=" + numServings +
+				", time=" + time +
+				'}';
 	}
 
 	@Override
