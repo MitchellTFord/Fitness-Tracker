@@ -17,15 +17,13 @@ import com.fitnesstracker.database.Meal;
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.ViewHolder> {
-
-	private EmptyRVHandler emptyRVHandler;
 
 	private List<Meal> data = new ArrayList<>();
 
@@ -47,15 +45,14 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 
 		holder.foodInfoText.setText(String.format(Locale.getDefault(),
 				"%.2f %s %s",
-				meal.getNumServings()*meal.getFood().getServingSize(),
+				meal.getFoodDiaryEntry().getNumServings()*meal.getFood().getServingSize(),
 				meal.getFood().getServingUnit(),
 				meal.getFood().getName()
 		));
 
-		holder.timeInfoText.setText("time");
-
-		holder.timeInfoText.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(meal.getTimeAsDate()));
-
+		holder.timeInfoText.setText(DateFormat
+				.getTimeInstance(DateFormat.SHORT)
+				.format(new Date(meal.getFoodDiaryEntry().getTime())));
 	}
 
 	@Override
@@ -65,18 +62,7 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 
 	public void setData(List<Meal> data) {
 		this.data = data;
-		handleEmpty();
 		notifyDataSetChanged();
-	}
-
-	public void handleEmpty() {
-		if (emptyRVHandler != null) {
-			emptyRVHandler.handleEmptyRV(data == null || data.isEmpty());
-		}
-	}
-
-	public void setEmptyRVHandler(EmptyRVHandler emptyRVHandler) {
-		this.emptyRVHandler = emptyRVHandler;
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {

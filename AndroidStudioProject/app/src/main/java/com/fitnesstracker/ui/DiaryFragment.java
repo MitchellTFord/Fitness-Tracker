@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTDatabase;
 import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -78,19 +80,14 @@ public class DiaryFragment extends Fragment {
 
 		// Set up the RecyclerView adapter
 		final DiaryEntryAdapter adapter = new DiaryEntryAdapter();
-		adapter.setEmptyRVHandler(new EmptyRVHandler() {
-			@Override public void handleEmptyRV(boolean isEmpty) {
-				requireView().findViewById(R.id.diary_rv_empty_text)
-						.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-				System.out.println("Visible: " + (isEmpty ? View.VISIBLE : View.GONE));
-			}
-		});
+
+		final TextView noDataTextView = requireView().findViewById(R.id.diary_rv_empty_text);
 
 		// Observe database changes
 		viewModel.getMeals().observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
 			@Override public void onChanged(List<Meal> meals) {
 				adapter.setData(meals);
-				System.out.println("Diary data changed.");
+				noDataTextView.setVisibility(meals == null || meals.isEmpty() ? View.VISIBLE : View.GONE);
 			}
 		});
 
@@ -109,6 +106,11 @@ public class DiaryFragment extends Fragment {
 	}
 
 	public void generateSampleData() {
-		viewModel.makeSampleMeal();
+		Food food = Food.makeRandom();
+		FoodDiaryEntry foodDiaryEntry = new FoodDiaryEntry(
+				food,
+				10*Math.random(),
+				System.currentTimeMillis());
+		viewModel.insert(food, foodDiaryEntry);
 	}
 }
