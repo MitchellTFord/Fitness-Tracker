@@ -16,8 +16,10 @@ import com.fitnesstracker.database.Meal;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,16 +47,14 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 
 		holder.foodInfoText.setText(String.format(Locale.getDefault(),
 				"%.2f %s %s",
-				meal.getNumServings()*meal.getFood().getServingSize(),
+				meal.getFoodDiaryEntry().getNumServings()*meal.getFood().getServingSize(),
 				meal.getFood().getServingUnit(),
 				meal.getFood().getName()
 		));
 
-		holder.timeInfoText.setText("time");
-		holder.timeInfoText.setText(DateTimeFormatter
-				.ofPattern("MM/dd/yy HH:mm")
-				.toFormat()
-				.format(meal.getTimeAsDate()));
+		holder.timeInfoText.setText(DateFormat
+				.getTimeInstance(DateFormat.SHORT)
+				.format(new Date(meal.getFoodDiaryEntry().getTime())));
 	}
 
 	@Override

@@ -120,8 +120,8 @@ public class Food {
 		return servingSize;
 	}
 
-	public void setServingSize(double servingSize) {
-		if (servingSize < 0) {
+	public void setServingSize(Double servingSize) {
+		if (servingSize == null || servingSize < 0) {
 			throw new IllegalArgumentException("Serving size must be greater than or equal to zero");
 		}
 		this.servingSize = servingSize;
@@ -141,5 +141,16 @@ public class Food {
 
 	public void setNutritionInfo(@NotNull NutritionInfo nutritionInfo) {
 		this.nutritionInfo = nutritionInfo;
+	}
+
+	@Override
+	public String toString() {
+		return "Food{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", servingSize=" + servingSize +
+				", servingUnit='" + servingUnit + '\'' +
+				", nutritionInfo=" + nutritionInfo +
+				'}';
 	}
 }

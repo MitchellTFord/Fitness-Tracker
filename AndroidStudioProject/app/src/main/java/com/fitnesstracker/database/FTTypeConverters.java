@@ -7,15 +7,8 @@ import androidx.room.TypeConverter;
  */
 public class FTTypeConverters {
 
-	/**
-	 * Convert {@link Meal} objects to their {@link FoodDiaryEntry} representations.
-	 *
-	 * @param meal the meal to convert
-	 *
-	 * @return the FoodDiaryEntry representation of meal
-	 */
 	@TypeConverter
-	public static FoodDiaryEntry mealToDiaryEntry(Meal meal) {
-		return meal.getDiaryEntry();
+	public int pass(int num) {
+		return num;
 	}
 }

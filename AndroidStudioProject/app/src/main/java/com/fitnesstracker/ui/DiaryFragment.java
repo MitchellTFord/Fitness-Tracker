@@ -19,6 +19,7 @@ import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTDatabase;
 import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -109,6 +110,11 @@ public class DiaryFragment extends Fragment {
 	}
 
 	public void generateSampleData() {
-		viewModel.makeSampleMeal();
+		Food food = Food.makeRandom();
+		FoodDiaryEntry foodDiaryEntry = new FoodDiaryEntry(
+				food,
+				10*Math.random(),
+				System.currentTimeMillis());
+		viewModel.insert(food, foodDiaryEntry);
 	}
 }
