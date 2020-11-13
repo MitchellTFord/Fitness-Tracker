@@ -1,4 +1,4 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fitnesstracker.R;
-import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.entities.Food;
 
 import java.util.List;
 import java.util.Locale;

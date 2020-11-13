@@ -6,19 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
-import com.fitnesstracker.database.daos.FTDao;
 import com.fitnesstracker.database.daos.FoodDao;
 import com.fitnesstracker.database.daos.FoodDiaryEntryDao;
+import com.fitnesstracker.database.entities.Food;
+import com.fitnesstracker.database.entities.FoodDiaryEntry;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A layer of abstraction between the Room database and the user interface.

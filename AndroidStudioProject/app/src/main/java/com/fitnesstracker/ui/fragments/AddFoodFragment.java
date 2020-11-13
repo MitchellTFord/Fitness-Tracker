@@ -1,4 +1,4 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

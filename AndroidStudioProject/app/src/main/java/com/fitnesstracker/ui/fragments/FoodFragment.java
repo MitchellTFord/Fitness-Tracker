@@ -1,4 +1,4 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTViewModel;
-import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.entities.Food;
+import com.fitnesstracker.ui.adapters.FoodAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;

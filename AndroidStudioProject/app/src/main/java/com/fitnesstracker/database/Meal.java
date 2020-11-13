@@ -1,14 +1,12 @@
 package com.fitnesstracker.database;
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
-import androidx.room.Ignore;
 import androidx.room.Relation;
 
-import java.util.Date;
+import com.fitnesstracker.database.entities.Food;
+import com.fitnesstracker.database.entities.FoodDiaryEntry;
+
 import java.util.Objects;
-import java.util.Random;
 
 public class Meal {
 

@@ -5,11 +5,17 @@ import androidx.room.Dao;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.fitnesstracker.database.FoodDiaryEntry;
+import com.fitnesstracker.database.entities.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
 
 import java.util.List;
 
+/**
+ * A data access object for {@link FoodDiaryEntry} entities to be used with {@link
+ * com.fitnesstracker.database.FTDatabase}.
+ * <p>
+ * This class also contains methods for getting {@link Meal} objects from the database.
+ */
 @Dao
 public abstract class FoodDiaryEntryDao extends FTDao<FoodDiaryEntry> {
 

@@ -4,10 +4,14 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
-import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.entities.Food;
 
 import java.util.List;
 
+/**
+ * A data access object for {@link Food} entities to be used with {@link
+ * com.fitnesstracker.database.FTDatabase}.
+ */
 @Dao
 public abstract class FoodDao extends FTDao<Food> {
 

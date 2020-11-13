@@ -1,4 +1,4 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,8 +20,6 @@ public class HomeFragment extends Fragment {
     Button b1;
 
     public HomeFragment() {
-        // Required empty public constructor
-
     }
 
     /**
@@ -30,7 +28,6 @@ public class HomeFragment extends Fragment {
      *
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -41,10 +38,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-
     }
 
     @Override

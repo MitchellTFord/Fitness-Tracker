@@ -1,4 +1,4 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,17 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fitnesstracker.R;
-import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.Meal;
 
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

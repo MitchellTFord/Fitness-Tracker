@@ -1,4 +1,4 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.fragments;
 
 import android.os.Bundle;
 
@@ -17,15 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fitnesstracker.R;
-import com.fitnesstracker.database.FTDatabase;
 import com.fitnesstracker.database.FTViewModel;
-import com.fitnesstracker.database.Food;
-import com.fitnesstracker.database.FoodDiaryEntry;
+import com.fitnesstracker.database.entities.Food;
+import com.fitnesstracker.database.entities.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
+import com.fitnesstracker.ui.adapters.DiaryEntryAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
