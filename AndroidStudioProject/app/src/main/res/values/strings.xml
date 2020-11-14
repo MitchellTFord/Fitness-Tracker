@@ -42,6 +42,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="search">Search</string>
-    <string name="new_food_button">New Food</string> // not sure where this is used
+    <string name="new_food_button">New Food</string>
+    // not sure where this is used
 
 </resources>

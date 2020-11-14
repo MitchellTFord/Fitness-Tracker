@@ -1,5 +1,6 @@
 package com.fitnesstracker.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.database.entities.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
+import com.fitnesstracker.ui.activities.AddFoodDiaryEntryActivity;
 import com.fitnesstracker.ui.adapters.DiaryEntryAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -95,15 +97,17 @@ public class DiaryFragment extends Fragment {
 		addDiaryEntryFAB = view.findViewById(R.id.add_diary_entry_fab);
 		addDiaryEntryFAB.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
-				Toast.makeText(requireContext(),
-						"Adding a random diary entry for testing",
-						Toast.LENGTH_SHORT).show();
-				generateSampleData();
+				//generateSampleData();
+				Intent intent = new Intent(getContext(), AddFoodDiaryEntryActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
 
 	public void generateSampleData() {
+		Toast.makeText(requireContext(),
+				"Adding a random diary entry for testing",
+				Toast.LENGTH_SHORT).show();
 		Food food = Food.makeRandom();
 		FoodDiaryEntry foodDiaryEntry = new FoodDiaryEntry(
 				food,
