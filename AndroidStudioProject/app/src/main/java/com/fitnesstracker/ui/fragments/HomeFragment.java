@@ -1,5 +1,6 @@
 package com.fitnesstracker.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.fitnesstracker.R;
+import com.fitnesstracker.ui.activities.AddFoodDiaryEntryActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,7 +19,6 @@ import com.fitnesstracker.R;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-    Button b1;
 
     public HomeFragment() {
     }
@@ -45,18 +46,15 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        b1 = v.findViewById(R.id.addmeal);
-        b1.setOnClickListener(new View.OnClickListener() {
+
+        Button addMealButton = v.findViewById(R.id.addmeal);
+        addMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DiaryFragment addFoodFragment = new DiaryFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.mainLayout, addFoodFragment);
-                transaction.commit();
-
+                Intent intent = new Intent(getContext(), AddFoodDiaryEntryActivity.class);
+                startActivity(intent);
             }
         });
-
 
         return v;
     }
