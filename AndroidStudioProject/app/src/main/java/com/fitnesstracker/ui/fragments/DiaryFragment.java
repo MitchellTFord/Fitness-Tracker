@@ -22,7 +22,7 @@ import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.database.entities.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
-import com.fitnesstracker.ui.activities.AddFoodDiaryEntryActivity;
+import com.fitnesstracker.ui.activities.AddMealActivity;
 import com.fitnesstracker.ui.adapters.DiaryEntryAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -98,7 +98,7 @@ public class DiaryFragment extends Fragment {
 		addDiaryEntryFAB.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
 				//generateSampleData();
-				Intent intent = new Intent(getContext(), AddFoodDiaryEntryActivity.class);
+				Intent intent = new Intent(getContext(), AddMealActivity.class);
 				startActivity(intent);
 			}
 		});

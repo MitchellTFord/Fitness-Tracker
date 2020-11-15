@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.fitnesstracker.R;
-import com.fitnesstracker.ui.activities.AddFoodDiaryEntryActivity;
+import com.fitnesstracker.ui.activities.AddMealActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +50,7 @@ public class HomeFragment extends Fragment {
         addMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AddFoodDiaryEntryActivity.class);
+                Intent intent = new Intent(getContext(), AddMealActivity.class);
                 startActivity(intent);
             }
         });
