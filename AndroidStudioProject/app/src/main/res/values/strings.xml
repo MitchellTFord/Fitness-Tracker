@@ -24,6 +24,12 @@
     <string name="empty_diary_rv_text">No data to display.\nTry adding a diary entry using the plus button.</string>
     <string name="diary_time_format">MM/dd/yy HH:mm</string>
 
+    <!-- Add Meal Activity -->
+    <string name="add_meal_back">Back</string>
+    <string name="add_meal_save">Save</string>
+    <string name="add_meal_food">Food</string>
+    <string name="add_meal_num_servings">Servings</string>
+
     <!-- Top Toolbar -->
     <string name="open_settings_title">Settings</string>
 
