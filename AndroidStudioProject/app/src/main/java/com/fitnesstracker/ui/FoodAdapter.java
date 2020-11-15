@@ -19,8 +19,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
 	private List<Food> data;
 
-	private EmptyRVHandler emptyRVHandler;
-
 	public FoodAdapter(List<Food> data) {
 		setData(data);
 	}
@@ -59,18 +57,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
 	public void setData(List<Food> data) {
 		this.data = data;
-		handleEmpty();
 		notifyDataSetChanged();
-	}
-
-	public void setEmptyRVHandler(EmptyRVHandler emptyRVHandler) {
-		this.emptyRVHandler = emptyRVHandler;
-	}
-
-	public void handleEmpty() {
-		if (emptyRVHandler != null) {
-			emptyRVHandler.handleEmptyRV(data == null || data.isEmpty());
-		}
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
