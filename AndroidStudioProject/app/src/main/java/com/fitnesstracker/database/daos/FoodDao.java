@@ -32,4 +32,10 @@ public abstract class FoodDao extends FTDao<Food> {
 
 	@Query("SELECT * FROM food WHERE name LIKE :name")
 	public abstract LiveData<List<Food>> getLD(String name);
+
+	@Query("SELECT COUNT(id) FROM food")
+	public abstract Integer getCount();
+
+	@Query("SELECT COUNT(id) FROM food")
+	public abstract LiveData<Integer> getCountLD();
 }

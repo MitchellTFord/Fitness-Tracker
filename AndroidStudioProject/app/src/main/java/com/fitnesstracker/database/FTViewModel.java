@@ -30,6 +30,7 @@ public class FTViewModel extends AndroidViewModel {
 
 	private final MutableLiveData<String> foodSearchKey;
 	private final LiveData<List<Food>> foods;
+	private final LiveData<Integer> numFoods;
 
 //	private final MutableLiveData<Long> foodDiaryEntrySearchKey;
 //	private final LiveData<List<FoodDiaryEntry>> foodDiaryEntries;
@@ -61,6 +62,8 @@ public class FTViewModel extends AndroidViewModel {
 			}
 		});
 
+		numFoods = foodDao.getCountLD();
+
 		mealSearchKey = new MutableLiveData<>(null);
 		meals = Transformations.switchMap(mealSearchKey, new Function<Long, LiveData<List<Meal>>>() {
 			@Override public LiveData<List<Meal>> apply(Long time) {
@@ -86,6 +89,10 @@ public class FTViewModel extends AndroidViewModel {
 
 	public void setFoodSearchKey(String foodSearchKey) {
 		this.foodSearchKey.setValue(foodSearchKey);
+	}
+
+	public LiveData<Integer> getNumFoods() {
+		return numFoods;
 	}
 
 	public void insert(final Food... foods) {
