@@ -71,16 +71,31 @@ public class AddMealActivity extends AppCompatActivity {
 
 	private void submit() {
 		Food food = (Food) foodSpinner.getSelectedItem();
-		double numServings = Double.parseDouble(numServingsEditText.getText().toString());
 
-		if(food == null) {
+		if (food == null) {
 			Toast.makeText(this,
 					"You must select a food.",
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
 
-		if(numServings <= 0) {
+		String numServingsText = numServingsEditText.getText().toString().trim();
+
+		if(numServingsText.length() == 0) {
+			Toast.makeText(this,
+					"You must specify a number of servings.",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		Double numServings = null;
+		try {
+			numServings = Double.parseDouble(numServingsText);
+		} catch (NumberFormatException ignored) {
+		}
+
+
+		if (numServings == null || numServings <= 0) {
 			Toast.makeText(this,
 					"You specify a number of servings greater than zero.",
 					Toast.LENGTH_SHORT).show();
@@ -120,7 +135,7 @@ public class AddMealActivity extends AppCompatActivity {
 		}
 
 		private View initView(int position, View convertView, ViewGroup parent) {
-			if(convertView == null) {
+			if (convertView == null) {
 				convertView = LayoutInflater
 						.from(getContext())
 						.inflate(R.layout.food_view, parent, false);
