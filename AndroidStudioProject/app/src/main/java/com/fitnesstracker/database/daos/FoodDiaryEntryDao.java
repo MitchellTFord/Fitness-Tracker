@@ -31,6 +31,12 @@ public abstract class FoodDiaryEntryDao extends FTDao<FoodDiaryEntry> {
 	@Query("SELECT * FROM diary_food WHERE id = :id")
 	public abstract LiveData<FoodDiaryEntry> getLD(long id);
 
+	@Query("SELECT * FROM diary_food WHERE id = :foodDiaryEntryId")
+	public abstract Meal getMeal(Long foodDiaryEntryId);
+
+	@Query("SELECT * FROM diary_food WHERE id = :foodDiaryEntryId")
+	public abstract LiveData<Meal> getMealLD(Long foodDiaryEntryId);
+
 	@Transaction
 	@Query("SELECT * FROM diary_food ORDER BY time DESC")
 	public abstract List<Meal> getAllMeals();
@@ -38,4 +44,6 @@ public abstract class FoodDiaryEntryDao extends FTDao<FoodDiaryEntry> {
 	@Transaction
 	@Query("SELECT * FROM diary_food ORDER BY time DESC")
 	public abstract LiveData<List<Meal>> getAllMealsLD();
+
+
 }

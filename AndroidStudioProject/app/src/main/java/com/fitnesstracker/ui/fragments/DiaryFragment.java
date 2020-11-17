@@ -17,12 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.Meal;
-import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.ui.activities.AddMealActivity;
 import com.fitnesstracker.ui.adapters.DiaryEntryAdapter;
 import com.fitnesstracker.ui.adapters.OnItemClickListener;
@@ -137,7 +135,9 @@ public class DiaryFragment extends Fragment {
 	 * @param meal the meal whose diary entry should be edited
 	 */
 	private void editMeal(Meal meal) {
-		// TODO: open activity for editing this meal
+		Intent intent = new Intent(getContext(), AddMealActivity.class);
+		intent.putExtra(AddMealActivity.EDIT_ID_EXTRA_KEY, meal.getFoodDiaryEntry().getId());
+		startActivity(intent);
 	}
 
 	/**

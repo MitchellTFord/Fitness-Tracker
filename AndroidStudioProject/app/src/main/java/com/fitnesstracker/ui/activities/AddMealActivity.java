@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTViewModel;
+import com.fitnesstracker.database.Meal;
 import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.database.entities.FoodDiaryEntry;
 
@@ -28,10 +30,24 @@ import java.util.Locale;
 
 public class AddMealActivity extends AppCompatActivity {
 
+	private static final String TAG = "AddMealActivity";
+
+	/**
+	 * The key of the extra that contains the id of the {@link FoodDiaryEntry} to edit.
+	 */
+	public static final String EDIT_ID_EXTRA_KEY = "diary_entry_id";
+
 	private FTViewModel viewModel;
 
+	private Button submitButton;
 	private Spinner foodSpinner;
 	private EditText numServingsEditText;
+
+	/**
+	 * If this activity is being used to edit a {@link FoodDiaryEntry}, this is the id of entry
+	 * being edited, -1 otherwise.
+	 */
+	private long editId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +77,47 @@ public class AddMealActivity extends AppCompatActivity {
 
 		numServingsEditText = findViewById(R.id.numServingsEditText);
 
-		Button submitButton = findViewById(R.id.submitButton);
+		submitButton = findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
 				submit();
 			}
 		});
+
+		editId = getIntent().getLongExtra(EDIT_ID_EXTRA_KEY, -1);
+		Log.d(TAG, "editId: " + editId);
+		if (editId != -1) {
+			setUpForEditing();
+		}
+	}
+
+	private void setUpForEditing() {
+		submitButton.setEnabled(false);
+
+		viewModel.setMealSearchKeyId(editId);
+		viewModel.getMealById().observe(this, new Observer<Meal>() {
+			@Override public void onChanged(Meal meal) {
+				setFoodSpinnerSelected(meal.getFood());
+				numServingsEditText.setText(String.format(
+						Locale.getDefault(),
+						"%f",
+						meal.getFoodDiaryEntry().getNumServings()));
+
+				submitButton.setEnabled(true);
+			}
+		});
+	}
+
+	private void setFoodSpinnerSelected(Food food) {
+		FoodSpinnerAdapter adapter = (FoodSpinnerAdapter) foodSpinner.getAdapter();
+		int count = adapter.getCount();
+		for (int i = 0; i < count; i++) {
+			Food item = adapter.getItem(i);
+			if (food.equals(item)) {
+				foodSpinner.setSelection(i, false);
+				return;
+			}
+		}
 	}
 
 	private void submit() {
@@ -81,7 +132,7 @@ public class AddMealActivity extends AppCompatActivity {
 
 		String numServingsText = numServingsEditText.getText().toString().trim();
 
-		if(numServingsText.length() == 0) {
+		if (numServingsText.length() == 0) {
 			Toast.makeText(this,
 					"You must specify a number of servings.",
 					Toast.LENGTH_SHORT).show();
@@ -102,11 +153,11 @@ public class AddMealActivity extends AppCompatActivity {
 			return;
 		}
 
-		viewModel.insert(new FoodDiaryEntry(food, numServings, System.currentTimeMillis()));
-
-		Toast.makeText(this,
-				"Successfully created the diary entry.",
-				Toast.LENGTH_SHORT).show();
+		if(editId == -1) {
+			viewModel.insert(new FoodDiaryEntry(food, numServings, System.currentTimeMillis()));
+		} else {
+			viewModel.update(new FoodDiaryEntry(editId, food.getId(), numServings, System.currentTimeMillis()));
+		}
 
 		finish();
 	}

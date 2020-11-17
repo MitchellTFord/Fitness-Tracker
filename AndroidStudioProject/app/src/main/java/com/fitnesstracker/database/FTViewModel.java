@@ -32,11 +32,11 @@ public class FTViewModel extends AndroidViewModel {
 	private final LiveData<List<Food>> foods;
 	private final LiveData<Integer> numFoods;
 
-//	private final MutableLiveData<Long> foodDiaryEntrySearchKey;
-//	private final LiveData<List<FoodDiaryEntry>> foodDiaryEntries;
-
 	private final MutableLiveData<Long> mealSearchKey;
 	private final LiveData<List<Meal>> meals;
+
+	private final MutableLiveData<Long> mealSearchKeyId;
+	private final LiveData<Meal> mealById;
 
 	public FTViewModel(@NonNull Application application) {
 		super(application);
@@ -68,6 +68,13 @@ public class FTViewModel extends AndroidViewModel {
 		meals = Transformations.switchMap(mealSearchKey, new Function<Long, LiveData<List<Meal>>>() {
 			@Override public LiveData<List<Meal>> apply(Long time) {
 				return foodDiaryEntryDao.getAllMealsLD();
+			}
+		});
+
+		mealSearchKeyId = new MutableLiveData<>(0L);
+		mealById = Transformations.switchMap(mealSearchKeyId, new Function<Long, LiveData<Meal>>() {
+			@Override public LiveData<Meal> apply(Long foodDiaryEntryId) {
+				return foodDiaryEntryDao.getMealLD(foodDiaryEntryId);
 			}
 		});
 	}
@@ -150,6 +157,37 @@ public class FTViewModel extends AndroidViewModel {
 				foodDiaryEntryDao.delete(foodDiaryEntries);
 			}
 		});
+	}
+
+	/**
+	 * Set the value of {@link FTViewModel#mealSearchKeyId}, which queries the database for a {@link
+	 * Meal} with a backing {@link FoodDiaryEntry} with the given id.
+	 *
+	 * @param foodDiaryEntryId the id of the backing {@link FoodDiaryEntry} of the desired meal
+	 *
+	 * @see FTViewModel#getMealById()
+	 */
+	public void setMealSearchKeyId(Long foodDiaryEntryId) {
+		this.mealSearchKeyId.setValue(foodDiaryEntryId);
+	}
+
+	/**
+	 * Get the results of the query performed in {@link FTViewModel#setMealSearchKey(Long)}.
+	 *
+	 * @return a {@link LiveData} object containing the results
+	 */
+	public LiveData<Meal> getMealById() {
+		return this.mealById;
+	}
+
+	/**
+	 * Calls {@link FTViewModel#setMealSearchKey(Long)} and get the results of the query.
+	 *
+	 * @return a {@link LiveData} object containing the results
+	 */
+	public LiveData<Meal> getMealById(Long foodDiaryEntryId) {
+		setMealSearchKeyId(foodDiaryEntryId);
+		return this.mealById;
 	}
 
 	public LiveData<List<Meal>> getMeals() {
