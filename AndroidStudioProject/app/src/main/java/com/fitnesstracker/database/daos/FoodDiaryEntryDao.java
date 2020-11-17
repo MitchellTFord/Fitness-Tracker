@@ -31,9 +31,11 @@ public abstract class FoodDiaryEntryDao extends FTDao<FoodDiaryEntry> {
 	@Query("SELECT * FROM diary_food WHERE id = :id")
 	public abstract LiveData<FoodDiaryEntry> getLD(long id);
 
+	@Transaction
 	@Query("SELECT * FROM diary_food WHERE id = :foodDiaryEntryId")
 	public abstract Meal getMeal(Long foodDiaryEntryId);
 
+	@Transaction
 	@Query("SELECT * FROM diary_food WHERE id = :foodDiaryEntryId")
 	public abstract LiveData<Meal> getMealLD(Long foodDiaryEntryId);
 

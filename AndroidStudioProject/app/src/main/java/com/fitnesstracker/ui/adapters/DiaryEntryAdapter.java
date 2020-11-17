@@ -45,7 +45,7 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 	}
 
 	/**
-	 * Constructor that specifies {@link DiaryEntryAdapter onItemClickListener}.
+	 * Constructor that specifies {@link DiaryEntryAdapter#onItemClickListener}.
 	 *
 	 * @param onItemClickListener the listener that should be used for clicks and long-clicks in
 	 *                            this adapter
