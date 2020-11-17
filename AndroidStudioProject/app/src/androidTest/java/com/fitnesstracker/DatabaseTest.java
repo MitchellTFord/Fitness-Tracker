@@ -6,11 +6,11 @@ import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.fitnesstracker.database.FoodDiaryEntry;
+import com.fitnesstracker.database.entities.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
 import com.fitnesstracker.database.daos.FTDao;
 import com.fitnesstracker.database.FTDatabase;
-import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.database.daos.FoodDao;
 import com.fitnesstracker.database.daos.FoodDiaryEntryDao;
 
@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;

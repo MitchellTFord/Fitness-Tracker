@@ -1,4 +1,4 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;

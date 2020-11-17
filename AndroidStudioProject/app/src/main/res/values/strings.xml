@@ -23,6 +23,17 @@
     <string name="add_diary_fab_desc">Add a Diary Entry</string>
     <string name="empty_diary_rv_text">No data to display.\nTry adding a diary entry using the plus button.</string>
     <string name="diary_time_format">MM/dd/yy HH:mm</string>
+    <string name="item_long_click_dialog_title">Diary Entry</string>
+    <string-array name="item_long_click_dialog_options">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
+
+    <!-- Add Meal Activity -->
+    <string name="add_meal_back">Back</string>
+    <string name="add_meal_save">Save</string>
+    <string name="add_meal_food">Food</string>
+    <string name="add_meal_num_servings">Servings</string>
 
     <!-- Top Toolbar -->
     <string name="open_settings_title">Settings</string>
@@ -42,6 +53,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="search">Search</string>
-    <string name="new_food_button">New Food</string> // not sure where this is used
+    <string name="new_food_button">New Food</string>
+    // not sure where this is used
 
 </resources>

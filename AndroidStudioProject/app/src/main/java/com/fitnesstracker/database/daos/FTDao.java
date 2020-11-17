@@ -1,24 +1,11 @@
 package com.fitnesstracker.database.daos;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.fitnesstracker.database.FTDatabase;
-import com.fitnesstracker.database.Food;
-import com.fitnesstracker.database.FoodDiaryEntry;
-import com.fitnesstracker.database.Meal;
-
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * A generic data access object to be used with {@link FTDatabase}.

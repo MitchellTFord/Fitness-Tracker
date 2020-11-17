@@ -7,9 +7,10 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.fitnesstracker.database.daos.FTDao;
 import com.fitnesstracker.database.daos.FoodDao;
 import com.fitnesstracker.database.daos.FoodDiaryEntryDao;
+import com.fitnesstracker.database.entities.Food;
+import com.fitnesstracker.database.entities.FoodDiaryEntry;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
