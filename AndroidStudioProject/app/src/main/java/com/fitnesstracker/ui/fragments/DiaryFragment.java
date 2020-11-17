@@ -29,8 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link DiaryFragment#newInstance} factory method to
+ * A simple {@link Fragment} subclass. Use the {@link DiaryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class DiaryFragment extends Fragment {
@@ -44,9 +43,9 @@ public class DiaryFragment extends Fragment {
 	}
 
 	/**
-	 * Use this factory method to create a new instance of
-	 * this fragment using the provided parameters.
-
+	 * Use this factory method to create a new instance of this fragment using the provided
+	 * parameters.
+	 *
 	 * @return A new instance of fragment DiaryFragment.
 	 */
 	// TODO: Rename and change types and number of parameters
@@ -102,17 +101,5 @@ public class DiaryFragment extends Fragment {
 				startActivity(intent);
 			}
 		});
-	}
-
-	public void generateSampleData() {
-		Toast.makeText(requireContext(),
-				"Adding a random diary entry for testing",
-				Toast.LENGTH_SHORT).show();
-		Food food = Food.makeRandom();
-		FoodDiaryEntry foodDiaryEntry = new FoodDiaryEntry(
-				food,
-				10*Math.random(),
-				System.currentTimeMillis());
-		viewModel.insert(food, foodDiaryEntry);
 	}
 }
