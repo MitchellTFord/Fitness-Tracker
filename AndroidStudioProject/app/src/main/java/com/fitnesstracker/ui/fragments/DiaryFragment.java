@@ -24,6 +24,7 @@ import com.fitnesstracker.database.entities.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
 import com.fitnesstracker.ui.activities.AddMealActivity;
 import com.fitnesstracker.ui.adapters.DiaryEntryAdapter;
+import com.fitnesstracker.ui.adapters.OnItemClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -77,8 +78,20 @@ public class DiaryFragment extends Fragment {
 		RecyclerView rv = (RecyclerView) view.findViewById(R.id.diary_recycler_view);
 		rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-		// Set up the RecyclerView adapter
-		final DiaryEntryAdapter adapter = new DiaryEntryAdapter();
+		// Set up the RecyclerView adapter with an OnItemClickListener
+		final DiaryEntryAdapter adapter = new DiaryEntryAdapter(new OnItemClickListener<Meal>() {
+			@Override public void onItemClicked(Meal item) {
+				Toast.makeText(requireContext(),
+						"Item clicked",
+						Toast.LENGTH_SHORT).show();
+			}
+
+			@Override public void onItemLongClicked(Meal item) {
+				Toast.makeText(requireContext(),
+						"Item long-clicked",
+						Toast.LENGTH_SHORT).show();
+			}
+		});
 
 		final TextView noDataTextView = requireView().findViewById(R.id.diary_rv_empty_text);
 
