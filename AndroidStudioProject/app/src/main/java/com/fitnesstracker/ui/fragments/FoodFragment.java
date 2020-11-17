@@ -1,5 +1,7 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTViewModel;
-import com.fitnesstracker.database.Food;
+import com.fitnesstracker.database.entities.Food;
+import com.fitnesstracker.ui.adapters.FoodAdapter;
+import com.fitnesstracker.ui.adapters.OnItemClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,7 +83,26 @@ public class FoodFragment extends Fragment {
 		foodRV.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 		// Set up the RecyclerView adapter
-		final FoodAdapter adapter = new FoodAdapter(new ArrayList<Food>());
+		final FoodAdapter adapter = new FoodAdapter(new OnItemClickListener<Food>() {
+			@Override public void onItemClicked(Food item) {
+				editFood(item);
+			}
+
+			@Override public void onItemLongClicked(final Food item) {
+				new AlertDialog.Builder(getActivity())
+						.setTitle(R.string.item_long_click_dialog_title)
+						.setItems(R.array.item_long_click_dialog_options, new DialogInterface.OnClickListener() {
+							@Override public void onClick(DialogInterface dialog, int which) {
+								if (which == 0) {
+									editFood(item);
+								} else if (which == 1) {
+									deleteFood(item);
+								}
+							}
+						})
+						.show();
+			}
+		});
 
 		final TextView noDataTextView = requireView().findViewById(R.id.food_rv_empty_text);
 
@@ -97,11 +120,37 @@ public class FoodFragment extends Fragment {
 		addFoodFAB = view.findViewById(R.id.add_food_fab);
 		addFoodFAB.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
-				Toast.makeText(requireContext(),
-						"Adding an random food for testing",
-						Toast.LENGTH_SHORT).show();
-				viewModel.insert(Food.makeRandom());
+				addFood();
 			}
 		});
+	}
+
+	private void addFood() {
+		// TODO: open an activity where the user can create a new food
+		Toast.makeText(requireContext(),
+				"Adding an random food for testing",
+				Toast.LENGTH_SHORT).show();
+		viewModel.insert(Food.makeRandom());
+	}
+
+	/**
+	 * Open an activity where the user can edit this food.
+	 *
+	 * @param food the food to edit
+	 */
+	private void editFood(Food food) {
+		// TODO: open an activity where the user can edit this food
+		Toast.makeText(requireContext(),
+				"Not yet implemented.",
+				Toast.LENGTH_SHORT).show();
+	}
+
+	/**
+	 * Delete a food from the database.
+	 *
+	 * @param food the food to delete
+	 */
+	private void deleteFood(Food food) {
+		viewModel.delete(food);
 	}
 }
