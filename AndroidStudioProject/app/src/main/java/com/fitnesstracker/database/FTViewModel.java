@@ -136,6 +136,22 @@ public class FTViewModel extends AndroidViewModel {
 		});
 	}
 
+	public void update(final FoodDiaryEntry... foodDiaryEntries) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				foodDiaryEntryDao.update(foodDiaryEntries);
+			}
+		});
+	}
+
+	public void delete(final FoodDiaryEntry... foodDiaryEntries) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				foodDiaryEntryDao.delete(foodDiaryEntries);
+			}
+		});
+	}
+
 	public LiveData<List<Meal>> getMeals() {
 		return meals;
 	}

@@ -1,5 +1,7 @@
 package com.fitnesstracker.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,9 +21,8 @@ import android.widget.Toast;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTViewModel;
-import com.fitnesstracker.database.entities.Food;
-import com.fitnesstracker.database.entities.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
+import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.ui.activities.AddMealActivity;
 import com.fitnesstracker.ui.adapters.DiaryEntryAdapter;
 import com.fitnesstracker.ui.adapters.OnItemClickListener;
@@ -81,15 +82,23 @@ public class DiaryFragment extends Fragment {
 		// Set up the RecyclerView adapter with an OnItemClickListener
 		final DiaryEntryAdapter adapter = new DiaryEntryAdapter(new OnItemClickListener<Meal>() {
 			@Override public void onItemClicked(Meal item) {
-				Toast.makeText(requireContext(),
-						"Item clicked",
-						Toast.LENGTH_SHORT).show();
+				editMeal(item);
 			}
 
-			@Override public void onItemLongClicked(Meal item) {
-				Toast.makeText(requireContext(),
-						"Item long-clicked",
-						Toast.LENGTH_SHORT).show();
+			// Display a dialog that allows the user to edit or delete this item
+			@Override public void onItemLongClicked(final Meal item) {
+				new AlertDialog.Builder(getActivity())
+						.setTitle(R.string.item_long_click_dialog_title)
+						.setItems(R.array.item_long_click_dialog_options, new DialogInterface.OnClickListener() {
+							@Override public void onClick(DialogInterface dialog, int which) {
+								if (which == 0) {
+									editMeal(item);
+								} else if (which == 1) {
+									deleteMeal(item);
+								}
+							}
+						})
+						.show();
 			}
 		});
 
@@ -109,10 +118,34 @@ public class DiaryFragment extends Fragment {
 		addDiaryEntryFAB = view.findViewById(R.id.add_diary_entry_fab);
 		addDiaryEntryFAB.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
-				//generateSampleData();
-				Intent intent = new Intent(getContext(), AddMealActivity.class);
-				startActivity(intent);
+				addMeal();
 			}
 		});
+	}
+
+	/**
+	 * Open the activity for adding a new {@link com.fitnesstracker.database.entities.FoodDiaryEntry}.
+	 */
+	private void addMeal() {
+		Intent intent = new Intent(getContext(), AddMealActivity.class);
+		startActivity(intent);
+	}
+
+	/**
+	 * Open the activity for editing a meal's backing {@link com.fitnesstracker.database.entities.FoodDiaryEntry}.
+	 *
+	 * @param meal the meal whose diary entry should be edited
+	 */
+	private void editMeal(Meal meal) {
+		// TODO: open activity for editing this meal
+	}
+
+	/**
+	 * Delete this meal's diary entry from the database.
+	 *
+	 * @param meal the meal whose diary entry should be deleted
+	 */
+	private void deleteMeal(Meal meal) {
+		viewModel.delete(meal.getFoodDiaryEntry());
 	}
 }
