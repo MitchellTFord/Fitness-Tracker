@@ -8,7 +8,6 @@ import androidx.room.Transaction;
 import com.fitnesstracker.database.entities.FoodDiaryEntry;
 import com.fitnesstracker.database.Meal;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -19,8 +18,6 @@ import java.util.List;
  */
 @Dao
 public abstract class FoodDiaryEntryDao extends FTDao<FoodDiaryEntry> {
-
-
 
 	@Query("SELECT * FROM diary_food ORDER BY time DESC")
 	public abstract List<FoodDiaryEntry> getAll();
@@ -50,25 +47,5 @@ public abstract class FoodDiaryEntryDao extends FTDao<FoodDiaryEntry> {
 	@Query("SELECT * FROM diary_food ORDER BY time DESC")
 	public abstract LiveData<List<Meal>> getAllMealsLD();
 
-	@Transaction
-	@Query("SELECT * " +
-			       "FROM diary_food " +
-			       "WHERE time BETWEEN :startTime AND :endTime " +
-			       "ORDER BY time DESC")
-	public abstract List<Meal> getMeals(long startTime, long endTime);
 
-	@Transaction
-	@Query("SELECT * " +
-			       "FROM diary_food " +
-			       "WHERE time BETWEEN :startTime AND :endTime " +
-			       "ORDER BY time DESC")
-	public abstract LiveData<List<Meal>> getMealsLD(long startTime, long endTime);
-
-//	public List<Meal> getMeals(Calendar calendar) {
-//		return getMeals(calendar.getTimeInMillis(), calendar.getTimeInMillis() + SECONDS_PER_DAY);
-//	}
-//
-//	public LiveData<List<Meal>> getMealsLD(Calendar calendar) {
-//		return getMealsLD(calendar.getTimeInMillis(), calendar.getTimeInMillis() + SECONDS_PER_DAY);
-//	}
 }

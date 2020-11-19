@@ -22,11 +22,6 @@ import java.util.concurrent.ExecutorService;
  */
 public class FTViewModel extends AndroidViewModel {
 
-	/**
-	 * The number of seconds in an average day.
-	 */
-	private static final long SECONDS_PER_DAY = 86_400;
-
 	private final FoodDao foodDao;
 	private final FoodDiaryEntryDao foodDiaryEntryDao;
 
@@ -37,8 +32,8 @@ public class FTViewModel extends AndroidViewModel {
 	private final LiveData<List<Food>> foods;
 	private final LiveData<Integer> numFoods;
 
-	private final MutableLiveData<Long> mealSearchKeyTime;
-	private final LiveData<List<Meal>> mealsByTime;
+	private final MutableLiveData<Long> mealSearchKey;
+	private final LiveData<List<Meal>> meals;
 
 	private final MutableLiveData<Long> mealSearchKeyId;
 	private final LiveData<Meal> mealById;
@@ -69,10 +64,10 @@ public class FTViewModel extends AndroidViewModel {
 
 		numFoods = foodDao.getCountLD();
 
-		mealSearchKeyTime = new MutableLiveData<>(0L);
-		mealsByTime = Transformations.switchMap(mealSearchKeyTime, new Function<Long, LiveData<List<Meal>>>() {
+		mealSearchKey = new MutableLiveData<>(null);
+		meals = Transformations.switchMap(mealSearchKey, new Function<Long, LiveData<List<Meal>>>() {
 			@Override public LiveData<List<Meal>> apply(Long time) {
-				return foodDiaryEntryDao.getMealsLD(time, time + SECONDS_PER_DAY);
+				return foodDiaryEntryDao.getAllMealsLD();
 			}
 		});
 
@@ -177,7 +172,7 @@ public class FTViewModel extends AndroidViewModel {
 	}
 
 	/**
-	 * Get the results of the query performed in {@link FTViewModel#setMealSearchKeyTime(Long)}.
+	 * Get the results of the query performed in {@link FTViewModel#setMealSearchKey(Long)}.
 	 *
 	 * @return a {@link LiveData} object containing the results
 	 */
@@ -186,7 +181,7 @@ public class FTViewModel extends AndroidViewModel {
 	}
 
 	/**
-	 * Calls {@link FTViewModel#setMealSearchKeyTime(Long)} and get the results of the query.
+	 * Calls {@link FTViewModel#setMealSearchKey(Long)} and get the results of the query.
 	 *
 	 * @return a {@link LiveData} object containing the results
 	 */
@@ -195,12 +190,12 @@ public class FTViewModel extends AndroidViewModel {
 		return this.mealById;
 	}
 
-	public LiveData<List<Meal>> getMealsByTime() {
-		return mealsByTime;
+	public LiveData<List<Meal>> getMeals() {
+		return meals;
 	}
 
-	public void setMealSearchKeyTime(Long mealSearchKeyTime) {
-		this.mealSearchKeyTime.setValue(mealSearchKeyTime);
+	public void setMealSearchKey(Long mealSearchKey) {
+		this.mealSearchKey.setValue(mealSearchKey);
 	}
 
 
