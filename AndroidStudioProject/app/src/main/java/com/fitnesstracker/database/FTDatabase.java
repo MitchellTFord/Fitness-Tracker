@@ -7,6 +7,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.fitnesstracker.database.daos.FoodDao;
+import com.fitnesstracker.database.daos.FoodDiaryEntryDao;
+import com.fitnesstracker.database.entities.Food;
+import com.fitnesstracker.database.entities.FoodDiaryEntry;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,7 +20,10 @@ import java.util.concurrent.Executors;
           exportSchema = false)
 @TypeConverters(FTTypeConverters.class)
 public abstract class FTDatabase extends RoomDatabase {
-	public abstract FTDao getDao();
+	//public abstract FTDao getDao();
+
+	public abstract FoodDao getFoodDao();
+	public abstract FoodDiaryEntryDao getFoodDiaryEntryDao();
 
 	private static volatile FTDatabase INSTANCE;
 	private static final int NUMBER_OF_THREADS = 4;

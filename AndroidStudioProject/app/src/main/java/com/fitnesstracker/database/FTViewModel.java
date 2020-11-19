@@ -6,87 +6,82 @@ import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
-import com.fitnesstracker.ui.DiaryEntryAdapter;
+import com.fitnesstracker.database.daos.FoodDao;
+import com.fitnesstracker.database.daos.FoodDiaryEntryDao;
+import com.fitnesstracker.database.entities.Food;
+import com.fitnesstracker.database.entities.FoodDiaryEntry;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 /**
  * A layer of abstraction between the Room database and the user interface.
  */
 public class FTViewModel extends AndroidViewModel {
 
-	private final FTDao dao;
+	private final FoodDao foodDao;
+	private final FoodDiaryEntryDao foodDiaryEntryDao;
+
 	private final FTDatabase db;
 	private final ExecutorService executor;
 
 	private final MutableLiveData<String> foodSearchKey;
 	private final LiveData<List<Food>> foods;
+	private final LiveData<Integer> numFoods;
 
-	private final MutableLiveData<Long> foodDiaryEntrySearchKey;
-	private final LiveData<List<FoodDiaryEntry>> foodDiaryEntries;
-
-	private final MediatorLiveData<List<FoodDiaryEntry>> mealTrigger;
+	private final MutableLiveData<Long> mealSearchKey;
 	private final LiveData<List<Meal>> meals;
+
+	private final MutableLiveData<Long> mealSearchKeyId;
+	private final LiveData<Meal> mealById;
 
 	public FTViewModel(@NonNull Application application) {
 		super(application);
+
+		// Get the database instance
 		db = FTDatabase.getDatabase(application);
-		dao = db.getDao();
+
+		// Get DAOs from the database
+		foodDao = db.getFoodDao();
+		foodDiaryEntryDao = db.getFoodDiaryEntryDao();
+
+		// Get the database's executor
 		executor = FTDatabase.getExecutor();
 
 		foodSearchKey = new MutableLiveData<>(null);
 		foods = Transformations.switchMap(foodSearchKey, new Function<String, LiveData<List<Food>>>() {
 			@Override public LiveData<List<Food>> apply(String name) {
-				if (name == null) {
-					return dao.getAllFoods();
+				if (name == null || name.equals("")) {
+					return foodDao.getAllLD();
 				} else {
-					return dao.getFood(name);
+					return foodDao.getLD(name);
 				}
 			}
 		});
 
-		foodDiaryEntrySearchKey = new MutableLiveData<>(null);
-		foodDiaryEntries = Transformations.switchMap(foodDiaryEntrySearchKey, new Function<Long, LiveData<List<FoodDiaryEntry>>>() {
-			@Override public LiveData<List<FoodDiaryEntry>> apply(Long time) {
-				if (time == null || time == 0) {
-					return dao.getAllFoodDiaryEntries();
-				} else {
-					return dao.getFoodDiaryEntries(time, time + 86_400_000);
-				}
+		numFoods = foodDao.getCountLD();
+
+		mealSearchKey = new MutableLiveData<>(null);
+		meals = Transformations.switchMap(mealSearchKey, new Function<Long, LiveData<List<Meal>>>() {
+			@Override public LiveData<List<Meal>> apply(Long time) {
+				return foodDiaryEntryDao.getAllMealsLD();
 			}
 		});
 
-		mealTrigger = new MediatorLiveData<>();
-		mealTrigger.addSource(foodDiaryEntries, new Observer<List<FoodDiaryEntry>>() {
-			@Override public void onChanged(List<FoodDiaryEntry> foodDiaryEntries) {
-				mealTrigger.setValue(foodDiaryEntries);
-			}
-		});
-		mealTrigger.addSource(foods, new Observer<List<Food>>() {
-			@Override public void onChanged(List<Food> foods) {
-				// Refresh on food table update
-				mealTrigger.setValue(mealTrigger.getValue());
-			}
-		});
-
-		meals = Transformations.switchMap(mealTrigger, new Function<List<FoodDiaryEntry>, LiveData<List<Meal>>>() {
-			@Override public LiveData<List<Meal>> apply(List<FoodDiaryEntry> foodDiaryEntries) {
-				return createMeals(foodDiaryEntries);
+		mealSearchKeyId = new MutableLiveData<>(0L);
+		mealById = Transformations.switchMap(mealSearchKeyId, new Function<Long, LiveData<Meal>>() {
+			@Override public LiveData<Meal> apply(Long foodDiaryEntryId) {
+				return foodDiaryEntryDao.getMealLD(foodDiaryEntryId);
 			}
 		});
 	}
 
+	/**
+	 * Clear all entries from the database.
+	 */
 	public void clearAllTables() {
 		executor.execute(new Runnable() {
 			@Override public void run() {
@@ -99,137 +94,117 @@ public class FTViewModel extends AndroidViewModel {
 		return foods;
 	}
 
+	public void setFoodSearchKey(String foodSearchKey) {
+		this.foodSearchKey.setValue(foodSearchKey);
+	}
+
+	public LiveData<Integer> getNumFoods() {
+		return numFoods;
+	}
+
 	public void insert(final Food... foods) {
 		executor.execute(new Runnable() {
 			@Override public void run() {
-				dao.insert(foods);
+				foodDao.insert(foods);
 			}
 		});
 	}
 
-	/**
-	 * Update one or more foods in the database.
-	 *
-	 * @param foods one or more food objects to update
-	 *
-	 * @return the number of items updated
-	 */
-	public int update(final Food... foods) {
-		final AtomicReference<Integer> numUpdates = new AtomicReference<>();
+	public void update(final Food... foods) {
 		executor.execute(new Runnable() {
 			@Override public void run() {
-				numUpdates.set(dao.update(foods));
+				foodDao.update(foods);
 			}
 		});
-		return numUpdates.get();
 	}
 
-	/**
-	 * Delete one or more foods from the database.
-	 *
-	 * @param foods one or more food objects to delete
-	 *
-	 * @return the number of items deleted
-	 */
-	public int delete(final Food... foods) {
-		final AtomicReference<Integer> numDeletes = new AtomicReference<>();
+	public void delete(final Food... foods) {
 		executor.execute(new Runnable() {
 			@Override public void run() {
-				numDeletes.set(dao.delete(foods));
+				foodDao.delete(foods);
 			}
 		});
-		return numDeletes.get();
 	}
 
 	public void insert(final FoodDiaryEntry... foodDiaryEntries) {
 		executor.execute(new Runnable() {
 			@Override public void run() {
-				dao.insert(foodDiaryEntries);
+				foodDiaryEntryDao.insert(foodDiaryEntries);
+			}
+		});
+	}
+
+	public void insert(final Food food, final FoodDiaryEntry foodDiaryEntry) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				foodDao.insert(food);
+				foodDiaryEntryDao.insert(foodDiaryEntry);
+			}
+		});
+	}
+
+	public void update(final FoodDiaryEntry... foodDiaryEntries) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				foodDiaryEntryDao.update(foodDiaryEntries);
+			}
+		});
+	}
+
+	public void delete(final FoodDiaryEntry... foodDiaryEntries) {
+		executor.execute(new Runnable() {
+			@Override public void run() {
+				foodDiaryEntryDao.delete(foodDiaryEntries);
 			}
 		});
 	}
 
 	/**
-	 * Update one or more meals in the database.
+	 * Set the value of {@link FTViewModel#mealSearchKeyId}, which queries the database for a {@link
+	 * Meal} with a backing {@link FoodDiaryEntry} with the given id.
 	 *
-	 * @param foodDiaryEntries one or more meals objects to update
+	 * @param foodDiaryEntryId the id of the backing {@link FoodDiaryEntry} of the desired meal
 	 *
-	 * @return the number of items updated
+	 * @see FTViewModel#getMealById()
 	 */
-	public int update(final FoodDiaryEntry... foodDiaryEntries) {
-		final AtomicReference<Integer> numUpdates = new AtomicReference<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				numUpdates.set(dao.update(foodDiaryEntries));
-			}
-		});
-		return numUpdates.get();
+	public void setMealSearchKeyId(Long foodDiaryEntryId) {
+		this.mealSearchKeyId.setValue(foodDiaryEntryId);
 	}
 
 	/**
-	 * Delete one or more meals from the database.
+	 * Get the results of the query performed in {@link FTViewModel#setMealSearchKey(Long)}.
 	 *
-	 * @param foodDiaryEntries one or more meals objects to delete
-	 *
-	 * @return the number of items deleted
+	 * @return a {@link LiveData} object containing the results
 	 */
-	public int delete(final FoodDiaryEntry... foodDiaryEntries) {
-		final AtomicReference<Integer> numDeletes = new AtomicReference<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				numDeletes.set(dao.delete(foodDiaryEntries));
-			}
-		});
-		return numDeletes.get();
+	public LiveData<Meal> getMealById() {
+		return this.mealById;
 	}
 
-	public void setFoodDiaryEntrySearchKey(long time) {
-		foodDiaryEntrySearchKey.setValue(time);
-	}
-
-	public LiveData<List<FoodDiaryEntry>> getFoodDiaryEntries() {
-		return foodDiaryEntries;
-	}
-
-	public void setFoodSearchKey(String foodSearchKey) {
-		this.foodSearchKey.setValue(foodSearchKey);
+	/**
+	 * Calls {@link FTViewModel#setMealSearchKey(Long)} and get the results of the query.
+	 *
+	 * @return a {@link LiveData} object containing the results
+	 */
+	public LiveData<Meal> getMealById(Long foodDiaryEntryId) {
+		setMealSearchKeyId(foodDiaryEntryId);
+		return this.mealById;
 	}
 
 	public LiveData<List<Meal>> getMeals() {
 		return meals;
 	}
 
-	private MutableLiveData<List<Meal>> createMeals(final List<FoodDiaryEntry> foodDiaryEntries) {
-		final List<Meal> meals = new ArrayList<>();
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				for(FoodDiaryEntry foodDiaryEntry : foodDiaryEntries) {
-					meals.add(new Meal(
-							foodDiaryEntry.getId(),
-							dao.getFood(foodDiaryEntry.getFoodId()),
-							foodDiaryEntry.getNumServings(),
-							foodDiaryEntry.getTime()));
-				}
-			}
-		});
-		return new MutableLiveData<>(meals);
+	public void setMealSearchKey(Long mealSearchKey) {
+		this.mealSearchKey.setValue(mealSearchKey);
 	}
 
-	public void makeSampleMeal() {
-		executor.execute(new Runnable() {
-			@Override public void run() {
-				try {
-					Food food = Food.makeRandom();
-					dao.insert(food);
 
-					Thread.sleep(50);
+//	public void setFoodDiaryEntrySearchKey(long time) {
+//		foodDiaryEntrySearchKey.setValue(time);
+//	}
+//
+//	public LiveData<List<FoodDiaryEntry>> getFoodDiaryEntries() {
+//		return foodDiaryEntries;
+//	}
 
-					Meal meal = new Meal(food, 1, System.currentTimeMillis());
-					dao.insert(meal.getDiaryEntry());
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 }

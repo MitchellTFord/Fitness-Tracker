@@ -1,5 +1,8 @@
-package com.fitnesstracker.ui;
+package com.fitnesstracker.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,22 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.fitnesstracker.R;
-import com.fitnesstracker.database.FTDatabase;
 import com.fitnesstracker.database.FTViewModel;
-import com.fitnesstracker.database.Food;
 import com.fitnesstracker.database.Meal;
+import com.fitnesstracker.ui.activities.AddMealActivity;
+import com.fitnesstracker.ui.adapters.DiaryEntryAdapter;
+import com.fitnesstracker.ui.adapters.OnItemClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link DiaryFragment#newInstance} factory method to
+ * A simple {@link Fragment} subclass. Use the {@link DiaryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class DiaryFragment extends Fragment {
@@ -42,9 +43,9 @@ public class DiaryFragment extends Fragment {
 	}
 
 	/**
-	 * Use this factory method to create a new instance of
-	 * this fragment using the provided parameters.
-
+	 * Use this factory method to create a new instance of this fragment using the provided
+	 * parameters.
+	 *
 	 * @return A new instance of fragment DiaryFragment.
 	 */
 	// TODO: Rename and change types and number of parameters
@@ -76,21 +77,36 @@ public class DiaryFragment extends Fragment {
 		RecyclerView rv = (RecyclerView) view.findViewById(R.id.diary_recycler_view);
 		rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-		// Set up the RecyclerView adapter
-		final DiaryEntryAdapter adapter = new DiaryEntryAdapter();
-		adapter.setEmptyRVHandler(new EmptyRVHandler() {
-			@Override public void handleEmptyRV(boolean isEmpty) {
-				requireView().findViewById(R.id.diary_rv_empty_text)
-						.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-				System.out.println("Visible: " + (isEmpty ? View.VISIBLE : View.GONE));
+		// Set up the RecyclerView adapter with an OnItemClickListener
+		final DiaryEntryAdapter adapter = new DiaryEntryAdapter(new OnItemClickListener<Meal>() {
+			@Override public void onItemClicked(Meal item) {
+				editMeal(item);
+			}
+
+			// Display a dialog that allows the user to edit or delete this item
+			@Override public void onItemLongClicked(final Meal item) {
+				new AlertDialog.Builder(getActivity())
+						.setTitle(R.string.item_long_click_dialog_title)
+						.setItems(R.array.item_long_click_dialog_options, new DialogInterface.OnClickListener() {
+							@Override public void onClick(DialogInterface dialog, int which) {
+								if (which == 0) {
+									editMeal(item);
+								} else if (which == 1) {
+									deleteMeal(item);
+								}
+							}
+						})
+						.show();
 			}
 		});
+
+		final TextView noDataTextView = requireView().findViewById(R.id.diary_rv_empty_text);
 
 		// Observe database changes
 		viewModel.getMeals().observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
 			@Override public void onChanged(List<Meal> meals) {
 				adapter.setData(meals);
-				System.out.println("Diary data changed.");
+				noDataTextView.setVisibility(meals == null || meals.isEmpty() ? View.VISIBLE : View.GONE);
 			}
 		});
 
@@ -100,15 +116,36 @@ public class DiaryFragment extends Fragment {
 		addDiaryEntryFAB = view.findViewById(R.id.add_diary_entry_fab);
 		addDiaryEntryFAB.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
-				Toast.makeText(requireContext(),
-						"Adding a random diary entry for testing",
-						Toast.LENGTH_SHORT).show();
-				generateSampleData();
+				addMeal();
 			}
 		});
 	}
 
-	public void generateSampleData() {
-		viewModel.makeSampleMeal();
+	/**
+	 * Open the activity for adding a new {@link com.fitnesstracker.database.entities.FoodDiaryEntry}.
+	 */
+	private void addMeal() {
+		Intent intent = new Intent(getContext(), AddMealActivity.class);
+		startActivity(intent);
+	}
+
+	/**
+	 * Open the activity for editing a meal's backing {@link com.fitnesstracker.database.entities.FoodDiaryEntry}.
+	 *
+	 * @param meal the meal whose diary entry should be edited
+	 */
+	private void editMeal(Meal meal) {
+		Intent intent = new Intent(getContext(), AddMealActivity.class);
+		intent.putExtra(AddMealActivity.EDIT_ID_EXTRA_KEY, meal.getFoodDiaryEntry().getId());
+		startActivity(intent);
+	}
+
+	/**
+	 * Delete this meal's diary entry from the database.
+	 *
+	 * @param meal the meal whose diary entry should be deleted
+	 */
+	private void deleteMeal(Meal meal) {
+		viewModel.delete(meal.getFoodDiaryEntry());
 	}
 }
