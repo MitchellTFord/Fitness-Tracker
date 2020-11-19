@@ -9,21 +9,26 @@ import androidx.room.TypeConverters;
 
 import com.fitnesstracker.database.daos.FoodDao;
 import com.fitnesstracker.database.daos.FoodDiaryEntryDao;
+import com.fitnesstracker.database.daos.NutritionGoalDao;
 import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.database.entities.FoodDiaryEntry;
+import com.fitnesstracker.database.entities.NutritionGoal;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Food.class, FoodDiaryEntry.class},
-          version = 1,
-          exportSchema = false)
+@Database(entities = {Food.class, FoodDiaryEntry.class, NutritionGoal.class},
+		version = 1,
+		exportSchema = false)
 @TypeConverters(FTTypeConverters.class)
 public abstract class FTDatabase extends RoomDatabase {
 	//public abstract FTDao getDao();
 
 	public abstract FoodDao getFoodDao();
+
 	public abstract FoodDiaryEntryDao getFoodDiaryEntryDao();
+
+	public abstract NutritionGoalDao getNutritionGoalDao();
 
 	private static volatile FTDatabase INSTANCE;
 	private static final int NUMBER_OF_THREADS = 4;
@@ -43,4 +48,6 @@ public abstract class FTDatabase extends RoomDatabase {
 	public static ExecutorService getExecutor() {
 		return executor;
 	}
+
+
 }
