@@ -1,5 +1,7 @@
 package com.fitnesstracker.ui.activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -7,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -68,10 +71,14 @@ public class SettingsActivity extends AppCompatActivity {
 				}
 			});
 
+			//NotificationCompat.Builder builder = new NotificationCompat.Builder(this, );
+
 			Preference sendTestNotification = findPreference("send_test_notification");
 			assert sendTestNotification != null;
 			sendTestNotification.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override public boolean onPreferenceClick(Preference preference) {
+
+
 					return true;
 				}
 			});
