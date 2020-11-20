@@ -26,12 +26,3 @@ jobs:
     # Build the project
     - name: Build with Gradle
       run: ./AndroidStudioProject/gradlew build
-      
-    # Execute instrumented unit tests
-    - name: Unit Test
-      run: ./AndroidStudioProject/gradlew test
-
-    # Generate a report
-    - name: Android Test Report
-      uses: asadmansr/android-test-report-action@v1.2.0
-      if: ${{ always() }} # IMPORTANT: run Android Test Report 
