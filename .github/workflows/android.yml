@@ -29,7 +29,7 @@ jobs:
       
     # Execute unit tests
     - name: Unit Test
-      run: ./gradlew testDebugUnitTest
+      run: ./AndroidStudioProject/gradlew testDebugUnitTest
 
     # Generate a report
     - name: Android Test Report
