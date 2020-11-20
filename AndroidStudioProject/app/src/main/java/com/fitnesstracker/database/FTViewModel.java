@@ -11,8 +11,10 @@ import androidx.lifecycle.Transformations;
 
 import com.fitnesstracker.database.daos.FoodDao;
 import com.fitnesstracker.database.daos.FoodDiaryEntryDao;
+import com.fitnesstracker.database.daos.NutritionGoalDao;
 import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.database.entities.FoodDiaryEntry;
+import com.fitnesstracker.database.entities.NutritionGoal;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +26,7 @@ public class FTViewModel extends AndroidViewModel {
 
 	private final FoodDao foodDao;
 	private final FoodDiaryEntryDao foodDiaryEntryDao;
+	private final NutritionGoalDao nutritionGoalDao;
 
 	private final FTDatabase db;
 	private final ExecutorService executor;
@@ -38,6 +41,8 @@ public class FTViewModel extends AndroidViewModel {
 	private final MutableLiveData<Long> mealSearchKeyId;
 	private final LiveData<Meal> mealById;
 
+	private final LiveData<List<NutritionGoal>> nutritionGoals;
+
 	public FTViewModel(@NonNull Application application) {
 		super(application);
 
@@ -47,13 +52,14 @@ public class FTViewModel extends AndroidViewModel {
 		// Get DAOs from the database
 		foodDao = db.getFoodDao();
 		foodDiaryEntryDao = db.getFoodDiaryEntryDao();
-
+		nutritionGoalDao = db.getNutritionGoalDao();
 		// Get the database's executor
 		executor = FTDatabase.getExecutor();
 
 		foodSearchKey = new MutableLiveData<>(null);
 		foods = Transformations.switchMap(foodSearchKey, new Function<String, LiveData<List<Food>>>() {
-			@Override public LiveData<List<Food>> apply(String name) {
+			@Override
+			public LiveData<List<Food>> apply(String name) {
 				if (name == null || name.equals("")) {
 					return foodDao.getAllLD();
 				} else {
@@ -73,10 +79,13 @@ public class FTViewModel extends AndroidViewModel {
 
 		mealSearchKeyId = new MutableLiveData<>(0L);
 		mealById = Transformations.switchMap(mealSearchKeyId, new Function<Long, LiveData<Meal>>() {
-			@Override public LiveData<Meal> apply(Long foodDiaryEntryId) {
+			@Override
+			public LiveData<Meal> apply(Long foodDiaryEntryId) {
 				return foodDiaryEntryDao.getMealLD(foodDiaryEntryId);
 			}
 		});
+
+		nutritionGoals = nutritionGoalDao.getAllLD();
 	}
 
 	/**
