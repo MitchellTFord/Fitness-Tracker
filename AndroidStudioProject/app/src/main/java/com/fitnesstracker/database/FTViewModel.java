@@ -162,18 +162,46 @@ public class FTViewModel extends AndroidViewModel {
 
 	public void delete(final FoodDiaryEntry... foodDiaryEntries) {
 		executor.execute(new Runnable() {
-			@Override public void run() {
+			@Override
+			public void run() {
 				foodDiaryEntryDao.delete(foodDiaryEntries);
 			}
 		});
 	}
+
+	public void insert(final NutritionGoal... nutritionGoals) {
+		executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				nutritionGoalDao.insert(nutritionGoals);
+			}
+		});
+	}
+
+	public void update(final NutritionGoal... nutritionGoals) {
+		executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				nutritionGoalDao.update(nutritionGoals);
+			}
+		});
+	}
+
+	public void delete(final NutritionGoal... nutritionGoals) {
+		executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				nutritionGoalDao.delete(nutritionGoals);
+			}
+		});
+	}
+
 
 	/**
 	 * Set the value of {@link FTViewModel#mealSearchKeyId}, which queries the database for a {@link
 	 * Meal} with a backing {@link FoodDiaryEntry} with the given id.
 	 *
 	 * @param foodDiaryEntryId the id of the backing {@link FoodDiaryEntry} of the desired meal
-	 *
 	 * @see FTViewModel#getMealById()
 	 */
 	public void setMealSearchKeyId(Long foodDiaryEntryId) {
