@@ -10,12 +10,16 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTViewModel;
+import com.fitnesstracker.ui.Application;
+
+import java.util.Random;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -71,17 +75,30 @@ public class SettingsActivity extends AppCompatActivity {
 				}
 			});
 
-			//NotificationCompat.Builder builder = new NotificationCompat.Builder(this, );
-
-			Preference sendTestNotification = findPreference("send_test_notification");
+			final Preference sendTestNotification = findPreference("send_test_notification");
 			assert sendTestNotification != null;
 			sendTestNotification.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override public boolean onPreferenceClick(Preference preference) {
-
-
+					sendTestNotification();
 					return true;
 				}
 			});
 		}
+
+		/**
+		 * Send a test notification on the reminder channel.
+		 */
+		private void sendTestNotification() {
+			NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), Application.REMINDER_CHANNEL_ID)
+					.setContentTitle("Test Notification Content Title")
+					.setContentText("Test Notification Content Text")
+					.setSmallIcon(R.drawable.ic_settings)
+					.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+					.setAutoCancel(true);
+
+			NotificationManagerCompat notificationManager = NotificationManagerCompat.from(requireContext());
+			notificationManager.notify(new Random().nextInt(), builder.build());
+		}
+
 	}
 }
