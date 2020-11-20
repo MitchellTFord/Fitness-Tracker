@@ -27,9 +27,9 @@ jobs:
     - name: Build with Gradle
       run: ./AndroidStudioProject/gradlew build
       
-    # Execute unit tests
+    # Execute instrumented unit tests
     - name: Unit Test
-      run: ./AndroidStudioProject/gradlew testDebugUnitTest
+      run: ./AndroidStudioProject/gradlew connectedAndroidTest
 
     # Generate a report
     - name: Android Test Report
