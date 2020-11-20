@@ -44,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
 			setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
 			Preference clearDataBase = findPreference("clear_db");
+			assert clearDataBase != null;
 			clearDataBase.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override public boolean onPreferenceClick(Preference preference) {
 					// Open a dialog box for the user to confirm their choice
@@ -63,6 +64,14 @@ public class SettingsActivity extends AppCompatActivity {
 							.setNegativeButton(R.string.no, null)
 							.setIcon(R.drawable.ic_warning)
 							.show();
+					return true;
+				}
+			});
+
+			Preference sendTestNotification = findPreference("send_test_notification");
+			assert sendTestNotification != null;
+			sendTestNotification.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override public boolean onPreferenceClick(Preference preference) {
 					return true;
 				}
 			});
