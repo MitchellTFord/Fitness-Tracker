@@ -32,6 +32,15 @@ public class NotificationPublisher extends BroadcastReceiver {
 	 */
 	public static final String KEY_NOTIFICATION = "notification";
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * It's expected that <code>intent</code> with have a {@link Notification} extra with key {@link
+	 * NotificationPublisher#KEY_NOTIFICATION} and an <code>int</code> extra representing the
+	 * notification's <code>id</code> with key {@link NotificationPublisher#KEY_NOTIFICATION_ID}.
+	 * <p>
+	 * If these extras are not present, this method will return early and not send a notification.
+	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
 
@@ -42,7 +51,7 @@ public class NotificationPublisher extends BroadcastReceiver {
 		Notification notification = intent.getParcelableExtra(KEY_NOTIFICATION);
 
 		// Check that a notification was successfully passed
-		if(notification == null) {
+		if (notification == null) {
 			Log.d(TAG, "Notification not properly passed");
 			return;
 		}
@@ -51,7 +60,7 @@ public class NotificationPublisher extends BroadcastReceiver {
 		int id = intent.getIntExtra(KEY_NOTIFICATION_ID, Integer.MIN_VALUE);
 
 		// Check that the notification ID was successfully passed
-		if(id == Integer.MIN_VALUE) {
+		if (id == Integer.MIN_VALUE) {
 			Log.d(TAG, "Notification ID not properly passed");
 			return;
 		}
