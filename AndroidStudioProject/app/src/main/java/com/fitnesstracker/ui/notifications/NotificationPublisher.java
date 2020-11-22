@@ -8,6 +8,8 @@ import android.content.Intent;
 
 public class NotificationPublisher extends BroadcastReceiver {
 
+	public static final int DAILY_REMINDER_NOTIFICATION_ID = 0;
+
 	public static final String KEY_NOTIFICATION_ID = "notification-id";
 	public static final String KEY_NOTIFICATION = "notification";
 
@@ -15,7 +17,7 @@ public class NotificationPublisher extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 
 		// Get the NotificationManager system service
-		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
 		// Get the notification from the intent
 		Notification notification = intent.getParcelableExtra(KEY_NOTIFICATION);

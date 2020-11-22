@@ -6,7 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +28,10 @@ import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.Meal;
 import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.database.entities.FoodDiaryEntry;
+import com.fitnesstracker.ui.Application;
+import com.fitnesstracker.ui.notifications.NotificationPublisher;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -121,6 +128,8 @@ public class AddMealActivity extends AppCompatActivity {
 	}
 
 	private void submit() {
+		Log.d(TAG, "submit()");
+
 		Food food = (Food) foodSpinner.getSelectedItem();
 
 		if (food == null) {
@@ -153,13 +162,56 @@ public class AddMealActivity extends AppCompatActivity {
 			return;
 		}
 
-		if(editId == -1) {
+		if (editId == -1) {
 			viewModel.insert(new FoodDiaryEntry(food, numServings, System.currentTimeMillis()));
 		} else {
 			viewModel.update(new FoodDiaryEntry(editId, food.getId(), numServings, System.currentTimeMillis()));
 		}
 
+		// Because the user has interacted with the app today, push the reminder notification
+		// back to tomorrow
+		scheduleDailyReminderNotification();
 		finish();
+	}
+
+	private void scheduleDailyReminderNotification() {
+		Log.d(TAG, "scheduleDailyReminderNotification()");
+
+		// Get a calendar instance for 8pm tomorrow
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, 20);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		// Push it back another day if the current reminder time has passed
+		if (Calendar.getInstance().after(calendar)) {
+			calendar.add(Calendar.DATE, 1);
+		}
+
+		Notification notification = new Notification.Builder(this, Application.REMINDER_CHANNEL_ID)
+				.setSmallIcon(R.mipmap.ic_launcher_round)
+				.setContentTitle("Fitness Tracker Daily Reminder")
+				.setContentText("It looks like you haven't logged any meals today.")
+				.build();
+
+		Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+		notificationIntent.putExtra(NotificationPublisher.KEY_NOTIFICATION, notification);
+		notificationIntent.putExtra(NotificationPublisher.KEY_NOTIFICATION_ID,
+				NotificationPublisher.DAILY_REMINDER_NOTIFICATION_ID);
+
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(
+				this,
+				NotificationPublisher.DAILY_REMINDER_NOTIFICATION_ID,
+				notificationIntent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+
+		AlarmManager alarmManager = getSystemService(AlarmManager.class);
+		alarmManager.setRepeating(
+				AlarmManager.RTC_WAKEUP,
+				calendar.getTimeInMillis(),
+				AlarmManager.INTERVAL_DAY,
+				pendingIntent);
 	}
 
 	static class FoodSpinnerAdapter extends ArrayAdapter<Food> {
