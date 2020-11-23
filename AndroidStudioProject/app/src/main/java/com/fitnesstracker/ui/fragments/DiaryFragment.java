@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTViewModel;
 import com.fitnesstracker.database.Meal;
+import com.fitnesstracker.database.entities.Food;
 import com.fitnesstracker.ui.activities.AddMealActivity;
 import com.fitnesstracker.ui.adapters.DiaryEntryAdapter;
 import com.fitnesstracker.ui.adapters.OnItemClickListener;
@@ -29,29 +30,34 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass. Use the {@link DiaryFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment where the user can view, edit, and delete {@link com.fitnesstracker.database.entities.FoodDiaryEntry}
+ * objects in the database.
  */
 public class DiaryFragment extends Fragment {
 
+	/**
+	 * The view model that this fragment uses to interact with the database.
+	 */
 	private FTViewModel viewModel;
 
+	/**
+	 * The floating action button for adding a new diary entry.
+	 */
 	private FloatingActionButton addDiaryEntryFAB;
 
+	/**
+	 * Required empty public constructor.
+	 */
 	public DiaryFragment() {
-		// Required empty public constructor
 	}
 
 	/**
-	 * Use this factory method to create a new instance of this fragment using the provided
-	 * parameters.
+	 * A factory method that creates a new instance of this fragment.
 	 *
-	 * @return A new instance of fragment DiaryFragment.
+	 * @return A new instance of DiaryFragment
 	 */
-	// TODO: Rename and change types and number of parameters
 	public static DiaryFragment newInstance() {
-		DiaryFragment fragment = new DiaryFragment();
-		return fragment;
+		return new DiaryFragment();
 	}
 
 	@Override
@@ -99,18 +105,18 @@ public class DiaryFragment extends Fragment {
 						.show();
 			}
 		});
+		rv.setAdapter(adapter);
 
+		// Set up the text view that displays when the recycler view has no data to display
 		final TextView noDataTextView = requireView().findViewById(R.id.diary_rv_empty_text);
 
-		// Observe database changes
+		// Observe database changes and update the recycler view and the no-data text view
 		viewModel.getMeals().observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
 			@Override public void onChanged(List<Meal> meals) {
 				adapter.setData(meals);
 				noDataTextView.setVisibility(meals == null || meals.isEmpty() ? View.VISIBLE : View.GONE);
 			}
 		});
-
-		rv.setAdapter(adapter);
 
 		// Set up the floating action button for adding new foods
 		addDiaryEntryFAB = view.findViewById(R.id.add_diary_entry_fab);
