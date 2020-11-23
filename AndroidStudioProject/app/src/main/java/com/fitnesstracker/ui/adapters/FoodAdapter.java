@@ -26,6 +26,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 	/**
 	 * The data being displayed in recycler views using this adapter.
 	 */
+	@Nullable
 	private List<Food> data;
 
 	/**
@@ -71,6 +72,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 		// Get the food item from data
+		assert data != null;
 		Food food = data.get(position);
 
 		// Set up the name text view
