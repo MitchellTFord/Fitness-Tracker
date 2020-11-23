@@ -47,5 +47,14 @@ public abstract class FoodDiaryEntryDao extends FTDao<FoodDiaryEntry> {
 	@Query("SELECT * FROM diary_food ORDER BY time DESC")
 	public abstract LiveData<List<Meal>> getAllMealsLD();
 
-
+	/**
+	 * Update a {@link FoodDiaryEntry} entity using a {@link Meal}.
+	 *
+	 * @param meal the meal whose underlying diary entry should be updated
+	 *
+	 * @return the number of database rows that were updated
+	 */
+	public int update(Meal meal) {
+		return update(meal.getFoodDiaryEntry());
+	}
 }
