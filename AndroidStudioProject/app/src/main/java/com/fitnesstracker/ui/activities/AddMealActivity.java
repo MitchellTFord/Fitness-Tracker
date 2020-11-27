@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * An {@link android.app.Activity} for adding {@link FoodDiaryEntry} objects to the database and
+ * An activity for adding {@link FoodDiaryEntry} objects to the database and
  * editing existing ones.
  * <p>
  * A new {@link FoodDiaryEntry} object can be created by starting this activity with no extras.

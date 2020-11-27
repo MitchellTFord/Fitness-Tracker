@@ -24,35 +24,37 @@ import com.fitnesstracker.ui.adapters.FoodAdapter;
 import com.fitnesstracker.ui.adapters.OnItemClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass. Use the {@link FoodFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment where the user can view, edit, and delete {@link Food} objects in the database.
  */
 public class FoodFragment extends Fragment {
 
+	/**
+	 * The floating action button for adding new foods.
+	 */
 	private FloatingActionButton addFoodFAB;
 
+	/**
+	 * The view model that this fragment uses to interact with the database.
+	 */
 	private FTViewModel viewModel;
 
+	/**
+	 * Required empty public constructor.
+	 */
 	public FoodFragment() {
-		// Required empty public constructor
 	}
 
 	/**
-	 * Use this factory method to create a new instance of this fragment using the provided
-	 * parameters.
+	 * A factory method that creates a new instance of this fragment.
 	 *
-	 * @return A new instance of fragment FoodFragment.
+	 * @return A new instance of FoodFragment
 	 */
-	@NotNull
+	@NonNull
 	public static FoodFragment newInstance() {
-		FoodFragment fragment = new FoodFragment();
-		return fragment;
+		return new FoodFragment();
 	}
 
 	@Override
@@ -61,22 +63,18 @@ public class FoodFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 
 		return inflater.inflate(R.layout.fragment_food, container, false);
 	}
 
-	@Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
 		// Get a view model
 		viewModel = ViewModelProviders.of(requireActivity()).get(FTViewModel.class);
-
-		// Sample Data
-		// ArrayList<Food> foods = new ArrayList<>();
-		// foods.add(new Food("Apple", "apple", 1d));
-		// foods.add(new Food("Orange", "orange", 2.5));
 
 		// Set up the RecyclerView
 		RecyclerView foodRV = (RecyclerView) view.findViewById(R.id.food_recycler_view);
@@ -84,10 +82,13 @@ public class FoodFragment extends Fragment {
 
 		// Set up the RecyclerView adapter
 		final FoodAdapter adapter = new FoodAdapter(new OnItemClickListener<Food>() {
+
+			// Start an activity for the user to edit this food
 			@Override public void onItemClicked(Food item) {
 				editFood(item);
 			}
 
+			// Open a dialog for choosing whether to edit or delete this food
 			@Override public void onItemLongClicked(final Food item) {
 				new AlertDialog.Builder(getActivity())
 						.setTitle(R.string.item_long_click_dialog_title)
@@ -103,18 +104,18 @@ public class FoodFragment extends Fragment {
 						.show();
 			}
 		});
+		foodRV.setAdapter(adapter);
 
+		// Set up the text view that displays when the recycler view has no data to display
 		final TextView noDataTextView = requireView().findViewById(R.id.food_rv_empty_text);
 
-		// Observe database changes
+		// Observe database changes and update the recycler view and the no-data text view
 		viewModel.getFoods().observe(getViewLifecycleOwner(), new Observer<List<Food>>() {
 			@Override public void onChanged(List<Food> foods) {
 				adapter.setData(foods);
 				noDataTextView.setVisibility(foods == null || foods.isEmpty() ? View.VISIBLE : View.GONE);
 			}
 		});
-
-		foodRV.setAdapter(adapter);
 
 		// Set up the floating action button for adding new foods
 		addFoodFAB = view.findViewById(R.id.add_food_fab);
@@ -125,6 +126,9 @@ public class FoodFragment extends Fragment {
 		});
 	}
 
+	/**
+	 * Open an activity where the user can create a new food.
+	 */
 	private void addFood() {
 		// TODO: open an activity where the user can create a new food
 		Toast.makeText(requireContext(),

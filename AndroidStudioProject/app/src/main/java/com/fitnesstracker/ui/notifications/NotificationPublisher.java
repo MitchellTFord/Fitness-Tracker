@@ -23,6 +23,11 @@ public class NotificationPublisher extends BroadcastReceiver {
 	public static final int DAILY_REMINDER_NOTIFICATION_ID = 0;
 
 	/**
+	 * The ID of the testing notification.
+	 */
+	public static final int TEST_NOTIFICATION_ID = 1;
+
+	/**
 	 * The key for the notification ID extra in <code>intent</code>.
 	 */
 	public static final String KEY_NOTIFICATION_ID = "notification-id";

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.Meal;
-import com.fitnesstracker.database.entities.FoodDiaryEntry;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -20,11 +19,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * A {@link RecyclerView.Adapter} for {@link DiaryEntryAdapter} objects.
+ *
+ * @author Mitchell Ford
+ */
 public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.ViewHolder> {
 
 	/**
 	 * The data that the {@link RecyclerView} should display.
 	 */
+	@Nullable
 	private List<Meal> data = new ArrayList<>();
 
 	/**
@@ -62,14 +67,17 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 
 		View diaryEntryView = inflater.inflate(R.layout.meal_view, parent, false);
 
-		ViewHolder viewHolder = new ViewHolder(diaryEntryView);
-		return viewHolder;
+		return new ViewHolder(diaryEntryView);
 	}
 
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+		// Get the meal item from data
+		assert data != null;
 		Meal meal = data.get(position);
 
+		// Set up the food info text view
 		holder.foodInfoText.setText(String.format(Locale.getDefault(),
 				"%.2f %s %s",
 				meal.getFoodDiaryEntry().getNumServings()*meal.getFood().getServingSize(),
@@ -77,29 +85,55 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 				meal.getFood().getName()
 		));
 
+		// Set up the time text view
 		holder.timeInfoText.setText(DateFormat
 				.getTimeInstance(DateFormat.SHORT)
 				.format(new Date(meal.getFoodDiaryEntry().getTime())));
 
-		// Notify onItemClickListener if it has been set
+		// Bind the onItemClickListener if one was given in the constructor
 		if (onItemClickListener != null) {
-			holder.bind(meal, onItemClickListener);
+			holder.bindOnItemClickListener(meal, onItemClickListener);
 		}
 	}
 
+	/**
+	 * Get the total number of items in this adapter.
+	 * <p>
+	 * If {@link DiaryEntryAdapter#data} is <code>null</code>, the item count is considered
+	 * <code>0</code>.
+	 *
+	 * @return the total number of items in this adapter
+	 */
 	@Override
 	public int getItemCount() {
 		return data == null ? 0 : data.size();
 	}
 
+	/**
+	 * Set the data in this adapter.
+	 * <p>
+	 * This method notifies of data changes using {@link RecyclerView.Adapter#notifyDataSetChanged()}.
+	 *
+	 * @param data the new data to set
+	 */
 	public void setData(@Nullable List<Meal> data) {
 		this.data = data;
 		notifyDataSetChanged();
 	}
 
+	/**
+	 * A view holder for {@link com.fitnesstracker.database.entities.FoodDiaryEntry} objects.
+	 */
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 
+		/**
+		 * Text view that displays information about the food and number of servings thereof.
+		 */
 		public TextView foodInfoText;
+
+		/**
+		 * Text view that displays the time this diary entry took place.
+		 */
 		public TextView timeInfoText;
 
 		public ViewHolder(@NonNull View itemView) {
@@ -116,12 +150,16 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Vi
 		 * @param onItemClickListener the {@link OnItemClickListener} that should handle click
 		 *                            events for this view holder
 		 */
-		public void bind(final Meal meal, final OnItemClickListener<Meal> onItemClickListener) {
+		public void bindOnItemClickListener(final Meal meal, final OnItemClickListener<Meal> onItemClickListener) {
+
+			// Set the click listener for this item view
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override public void onClick(View v) {
 					onItemClickListener.onItemClicked(meal);
 				}
 			});
+
+			// Set the long-click listener for this item view
 			itemView.setOnLongClickListener(new View.OnLongClickListener() {
 				@Override public boolean onLongClick(View v) {
 					onItemClickListener.onItemLongClicked(meal);
