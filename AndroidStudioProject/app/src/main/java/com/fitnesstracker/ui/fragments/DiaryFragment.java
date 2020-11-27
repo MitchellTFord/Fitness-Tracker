@@ -136,7 +136,7 @@ public class DiaryFragment extends Fragment {
 	 */
 	private void editMeal(Meal meal) {
 		Intent intent = new Intent(getContext(), AddMealActivity.class);
-		intent.putExtra(AddMealActivity.EDIT_ID_EXTRA_KEY, meal.getFoodDiaryEntry().getId());
+		intent.putExtra(AddMealActivity.KEY_EDIT_ID, meal.getFoodDiaryEntry().getId());
 		startActivity(intent);
 	}
 
