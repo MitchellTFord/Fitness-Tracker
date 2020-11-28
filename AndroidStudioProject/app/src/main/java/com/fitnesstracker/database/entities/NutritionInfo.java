@@ -14,67 +14,67 @@ public class NutritionInfo {
 
 	/** The number of calories (kcal) */
 	@ColumnInfo(name = "calories")
-	public int calories; //kcal
+	private int calories; //kcal
 
 	/** The number of calories (kcal) from fat */
 	@ColumnInfo(name = "fat_calories")
-	public int fatCalories; //kcal
+	private int fatCalories; //kcal
 
 	/** The amount of fat in grams */
 	@ColumnInfo(name = "total_fat")
-	public int totalFat; //g
+	private int totalFat; //g
 
 	/** The amount of saturated fat in grams */
 	@ColumnInfo(name = "saturated_fat")
-	public int saturatedFat; //g
+	private int saturatedFat; //g
 
 	/** The amount of trans fat in grams */
 	@ColumnInfo(name = "trans_fat")
-	public int transFat; //g
+	private int transFat; //g
 
 	/** The amount of cholesterol in milligrams */
 	@ColumnInfo(name = "cholesterol")
-	public int cholesterol; //mg
+	private int cholesterol; //mg
 
 	/** The amount of sodium in milligrams */
 	@ColumnInfo(name = "sodium")
-	public int sodium; //mg
+	private int sodium; //mg
 
 	/** The total amount of carbohydrates in grams */
 	@ColumnInfo(name = "total_carbs")
-	public int totalCarbs; //g
+	private int totalCarbs; //g
 
 	/** The amount of dietary fiber in grams */
 	@ColumnInfo(name = "dietary_fiber")
-	public int dietaryFiber; //g
+	private int dietaryFiber; //g
 
 	/** The total amount of sugar in grams */
 	@ColumnInfo(name = "total_sugars")
-	public int totalSugars; //g
+	private int totalSugars; //g
 
 	/** The amount of added sugars in grams */
 	@ColumnInfo(name = "added_sugars")
-	public int addedSugars; //g
+	private int addedSugars; //g
 
 	/** The amount of protein in grams */
 	@ColumnInfo(name = "protein")
-	public int protein; //g
+	private int protein; //g
 
 	/** The amount of vitamin D in micrograms */
 	@ColumnInfo(name = "vitamin_d")
-	public int vitaminD;
+	private int vitaminD;
 
 	/** The amount of calcium in milligrams */
 	@ColumnInfo(name = "calcium")
-	public int calcium;
+	private int calcium;
 
 	/** The amount of iron in milligrams */
 	@ColumnInfo(name = "iron")
-	public int iron;
+	private int iron;
 
 	/** The amount of potassium in milligrams */
 	@ColumnInfo(name = "potassium")
-	public int potassium; //mg
+	private int potassium; //mg
 
 	/**
 	 * Default constructor, leaves all attributes with their default values.
@@ -88,22 +88,22 @@ public class NutritionInfo {
 	 * @param other the object to copy data from
 	 */
 	public NutritionInfo(@NonNull NutritionInfo other) {
-		this.calories = other.calories;
-		this.fatCalories = other.fatCalories;
-		this.totalFat = other.totalFat;
-		this.saturatedFat = other.saturatedFat;
-		this.transFat = other.transFat;
-		this.cholesterol = other.cholesterol;
-		this.sodium = other.sodium;
-		this.totalCarbs = other.totalCarbs;
-		this.dietaryFiber = other.dietaryFiber;
-		this.totalSugars = other.totalSugars;
-		this.addedSugars = other.addedSugars;
-		this.protein = other.protein;
-		this.vitaminD = other.vitaminD;
-		this.calcium = other.calcium;
-		this.iron = other.iron;
-		this.potassium = other.potassium;
+		this.setCalories(other.getCalories());
+		this.setFatCalories(other.getFatCalories());
+		this.setTotalFat(other.getTotalFat());
+		this.setSaturatedFat(other.getSaturatedFat());
+		this.setTransFat(other.getTransFat());
+		this.setCholesterol(other.getCholesterol());
+		this.setSodium(other.getSodium());
+		this.setTotalCarbs(other.getTotalCarbs());
+		this.setDietaryFiber(other.getDietaryFiber());
+		this.setTotalSugars(other.getTotalSugars());
+		this.setAddedSugars(other.getAddedSugars());
+		this.setProtein(other.getProtein());
+		this.setVitaminD(other.getVitaminD());
+		this.setCalcium(other.getCalcium());
+		this.setIron(other.getIron());
+		this.setPotassium(other.getPotassium());
 	}
 
 	/**
@@ -115,22 +115,22 @@ public class NutritionInfo {
 		NutritionInfo nutritionInfo = new NutritionInfo();
 		Random random = new Random();
 
-		nutritionInfo.calories = random.nextInt(1000);
-		nutritionInfo.fatCalories = random.nextInt(1000);
-		nutritionInfo.totalFat = random.nextInt(500);
-		nutritionInfo.saturatedFat = random.nextInt(500);
-		nutritionInfo.transFat = random.nextInt(500);
-		nutritionInfo.cholesterol = random.nextInt(500);
-		nutritionInfo.sodium = random.nextInt(2500);
-		nutritionInfo.totalCarbs = random.nextInt(500);
-		nutritionInfo.dietaryFiber = random.nextInt(500);
-		nutritionInfo.totalSugars = random.nextInt(500);
-		nutritionInfo.addedSugars = random.nextInt(500);
-		nutritionInfo.protein = random.nextInt(500);
-		nutritionInfo.vitaminD = random.nextInt(500);
-		nutritionInfo.calcium = random.nextInt(500);
-		nutritionInfo.iron = random.nextInt(500);
-		nutritionInfo.potassium = random.nextInt(500);
+		nutritionInfo.setCalories(random.nextInt(1000));
+		nutritionInfo.setFatCalories(random.nextInt(1000));
+		nutritionInfo.setTotalFat(random.nextInt(500));
+		nutritionInfo.setSaturatedFat(random.nextInt(500));
+		nutritionInfo.setTransFat(random.nextInt(500));
+		nutritionInfo.setCholesterol(random.nextInt(500));
+		nutritionInfo.setSodium(random.nextInt(2500));
+		nutritionInfo.setTotalCarbs(random.nextInt(500));
+		nutritionInfo.setDietaryFiber(random.nextInt(500));
+		nutritionInfo.setTotalSugars(random.nextInt(500));
+		nutritionInfo.setAddedSugars(random.nextInt(500));
+		nutritionInfo.setProtein(random.nextInt(500));
+		nutritionInfo.setVitaminD(random.nextInt(500));
+		nutritionInfo.setCalcium(random.nextInt(500));
+		nutritionInfo.setIron(random.nextInt(500));
+		nutritionInfo.setPotassium(random.nextInt(500));
 
 		return nutritionInfo;
 	}
@@ -186,22 +186,22 @@ public class NutritionInfo {
 	 * @param other the NutritionInfo object to get values from
 	 */
 	public void add(@NonNull NutritionInfo other) {
-		this.calories += other.calories;
-		this.fatCalories += other.fatCalories;
-		this.totalFat += other.totalFat;
-		this.saturatedFat += other.saturatedFat;
-		this.transFat += other.transFat;
-		this.cholesterol += other.cholesterol;
-		this.sodium += other.sodium;
-		this.totalCarbs += other.totalCarbs;
-		this.dietaryFiber += other.dietaryFiber;
-		this.totalSugars += other.totalSugars;
-		this.addedSugars += other.addedSugars;
-		this.protein += other.protein;
-		this.vitaminD += other.vitaminD;
-		this.calcium += other.calcium;
-		this.iron += other.iron;
-		this.potassium += other.potassium;
+		this.setCalories(this.getCalories() + other.getCalories());
+		this.setFatCalories(this.getFatCalories() + other.getFatCalories());
+		this.setTotalFat(this.getTotalFat() + other.getTotalFat());
+		this.setSaturatedFat(this.getSaturatedFat() + other.getSaturatedFat());
+		this.setTransFat(this.getTransFat() + other.getTransFat());
+		this.setCholesterol(this.getCholesterol() + other.getCholesterol());
+		this.setSodium(this.getSodium() + other.getSodium());
+		this.setTotalCarbs(this.getTotalCarbs() + other.getTotalCarbs());
+		this.setDietaryFiber(this.getDietaryFiber() + other.getDietaryFiber());
+		this.setTotalSugars(this.getTotalSugars() + other.getTotalSugars());
+		this.setAddedSugars(this.getAddedSugars() + other.getAddedSugars());
+		this.setProtein(this.getProtein() + other.getProtein());
+		this.setVitaminD(this.getVitaminD() + other.getVitaminD());
+		this.setCalcium(this.getCalcium() + other.getCalcium());
+		this.setIron(this.getIron() + other.getIron());
+		this.setPotassium(this.getPotassium() + other.getPotassium());
 	}
 
 	/**
@@ -232,22 +232,22 @@ public class NutritionInfo {
 	 * @param scalar the scalar to multiply each field by
 	 */
 	public void mul(double scalar) {
-		this.calories *= scalar;
-		this.fatCalories *= scalar;
-		this.totalFat *= scalar;
-		this.saturatedFat *= scalar;
-		this.transFat *= scalar;
-		this.cholesterol *= scalar;
-		this.sodium *= scalar;
-		this.totalCarbs *= scalar;
-		this.dietaryFiber *= scalar;
-		this.totalSugars *= scalar;
-		this.addedSugars *= scalar;
-		this.protein *= scalar;
-		this.vitaminD *= scalar;
-		this.calcium *= scalar;
-		this.iron *= scalar;
-		this.potassium *= scalar;
+		this.setCalories((int) (this.getCalories()*scalar));
+		this.setFatCalories((int) (this.getFatCalories()*scalar));
+		this.setTotalFat((int) (this.getTotalFat()*scalar));
+		this.setSaturatedFat((int) (this.getSaturatedFat()*scalar));
+		this.setTransFat((int) (this.getTransFat()*scalar));
+		this.setCholesterol((int) (this.getCholesterol()*scalar));
+		this.setSodium((int) (this.getSodium()*scalar));
+		this.setTotalCarbs((int) (this.getTotalCarbs()*scalar));
+		this.setDietaryFiber((int) (this.getDietaryFiber()*scalar));
+		this.setTotalSugars((int) (this.getTotalSugars()*scalar));
+		this.setAddedSugars((int) (this.getAddedSugars()*scalar));
+		this.setProtein((int) (this.getProtein()*scalar));
+		this.setVitaminD((int) (this.getVitaminD()*scalar));
+		this.setCalcium((int) (this.getCalcium()*scalar));
+		this.setIron((int) (this.getIron()*scalar));
+		this.setPotassium((int) (this.getPotassium()*scalar));
 	}
 
 	@Override
@@ -255,21 +255,165 @@ public class NutritionInfo {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		NutritionInfo that = (NutritionInfo) o;
-		return calories == that.calories &&
-				fatCalories == that.fatCalories &&
-				totalFat == that.totalFat &&
-				saturatedFat == that.saturatedFat &&
-				transFat == that.transFat &&
-				cholesterol == that.cholesterol &&
-				sodium == that.sodium &&
-				totalCarbs == that.totalCarbs &&
-				dietaryFiber == that.dietaryFiber &&
-				totalSugars == that.totalSugars &&
-				addedSugars == that.addedSugars &&
-				protein == that.protein &&
-				vitaminD == that.vitaminD &&
-				calcium == that.calcium &&
-				iron == that.iron &&
-				potassium == that.potassium;
+		return getCalories() == that.getCalories() &&
+				getFatCalories() == that.getFatCalories() &&
+				getTotalFat() == that.getTotalFat() &&
+				getSaturatedFat() == that.getSaturatedFat() &&
+				getTransFat() == that.getTransFat() &&
+				getCholesterol() == that.getCholesterol() &&
+				getSodium() == that.getSodium() &&
+				getTotalCarbs() == that.getTotalCarbs() &&
+				getDietaryFiber() == that.getDietaryFiber() &&
+				getTotalSugars() == that.getTotalSugars() &&
+				getAddedSugars() == that.getAddedSugars() &&
+				getProtein() == that.getProtein() &&
+				getVitaminD() == that.getVitaminD() &&
+				getCalcium() == that.getCalcium() &&
+				getIron() == that.getIron() &&
+				getPotassium() == that.getPotassium();
+	}
+
+	/** The number of calories (kcal) */
+	public int getCalories() {
+		return calories;
+	}
+
+	public void setCalories(int calories) {
+		this.calories = calories;
+	}
+
+	/** The number of calories (kcal) from fat */
+	public int getFatCalories() {
+		return fatCalories;
+	}
+
+	public void setFatCalories(int fatCalories) {
+		this.fatCalories = fatCalories;
+	}
+
+	/** The amount of fat in grams */
+	public int getTotalFat() {
+		return totalFat;
+	}
+
+	public void setTotalFat(int totalFat) {
+		this.totalFat = totalFat;
+	}
+
+	/** The amount of saturated fat in grams */
+	public int getSaturatedFat() {
+		return saturatedFat;
+	}
+
+	public void setSaturatedFat(int saturatedFat) {
+		this.saturatedFat = saturatedFat;
+	}
+
+	/** The amount of trans fat in grams */
+	public int getTransFat() {
+		return transFat;
+	}
+
+	public void setTransFat(int transFat) {
+		this.transFat = transFat;
+	}
+
+	/** The amount of cholesterol in milligrams */
+	public int getCholesterol() {
+		return cholesterol;
+	}
+
+	public void setCholesterol(int cholesterol) {
+		this.cholesterol = cholesterol;
+	}
+
+	/** The amount of sodium in milligrams */
+	public int getSodium() {
+		return sodium;
+	}
+
+	public void setSodium(int sodium) {
+		this.sodium = sodium;
+	}
+
+	/** The total amount of carbohydrates in grams */
+	public int getTotalCarbs() {
+		return totalCarbs;
+	}
+
+	public void setTotalCarbs(int totalCarbs) {
+		this.totalCarbs = totalCarbs;
+	}
+
+	/** The amount of dietary fiber in grams */
+	public int getDietaryFiber() {
+		return dietaryFiber;
+	}
+
+	public void setDietaryFiber(int dietaryFiber) {
+		this.dietaryFiber = dietaryFiber;
+	}
+
+	/** The total amount of sugar in grams */
+	public int getTotalSugars() {
+		return totalSugars;
+	}
+
+	public void setTotalSugars(int totalSugars) {
+		this.totalSugars = totalSugars;
+	}
+
+	/** The amount of added sugars in grams */
+	public int getAddedSugars() {
+		return addedSugars;
+	}
+
+	public void setAddedSugars(int addedSugars) {
+		this.addedSugars = addedSugars;
+	}
+
+	/** The amount of protein in grams */
+	public int getProtein() {
+		return protein;
+	}
+
+	public void setProtein(int protein) {
+		this.protein = protein;
+	}
+
+	/** The amount of vitamin D in micrograms */
+	public int getVitaminD() {
+		return vitaminD;
+	}
+
+	public void setVitaminD(int vitaminD) {
+		this.vitaminD = vitaminD;
+	}
+
+	/** The amount of calcium in milligrams */
+	public int getCalcium() {
+		return calcium;
+	}
+
+	public void setCalcium(int calcium) {
+		this.calcium = calcium;
+	}
+
+	/** The amount of iron in milligrams */
+	public int getIron() {
+		return iron;
+	}
+
+	public void setIron(int iron) {
+		this.iron = iron;
+	}
+
+	/** The amount of potassium in milligrams */
+	public int getPotassium() {
+		return potassium;
+	}
+
+	public void setPotassium(int potassium) {
+		this.potassium = potassium;
 	}
 }
