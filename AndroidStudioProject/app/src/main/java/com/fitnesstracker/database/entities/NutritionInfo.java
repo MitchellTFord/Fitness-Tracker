@@ -1,5 +1,8 @@
 package com.fitnesstracker.database.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 
@@ -10,7 +13,7 @@ import java.util.Random;
  *
  * @author Mitchell Ford
  */
-public class NutritionInfo {
+public class NutritionInfo implements Parcelable {
 
 	/** The number of calories (kcal) */
 	@ColumnInfo(name = "calories")
@@ -105,6 +108,45 @@ public class NutritionInfo {
 		this.setIron(other.getIron());
 		this.setPotassium(other.getPotassium());
 	}
+
+	/**
+	 * Constructor reads data from a {@link Parcel}.
+	 *
+	 * @param in the parcel to read from
+	 */
+	protected NutritionInfo(@NonNull Parcel in) {
+		calories = in.readInt();
+		fatCalories = in.readInt();
+		totalFat = in.readInt();
+		saturatedFat = in.readInt();
+		transFat = in.readInt();
+		cholesterol = in.readInt();
+		sodium = in.readInt();
+		totalCarbs = in.readInt();
+		dietaryFiber = in.readInt();
+		totalSugars = in.readInt();
+		addedSugars = in.readInt();
+		protein = in.readInt();
+		vitaminD = in.readInt();
+		calcium = in.readInt();
+		iron = in.readInt();
+		potassium = in.readInt();
+	}
+
+	/**
+	 * A {@link android.os.Parcelable.Creator} of NutritionInfo objects from {@link Parcel} objects.
+	 */
+	public static final Creator<NutritionInfo> CREATOR = new Creator<NutritionInfo>() {
+		@Override
+		public NutritionInfo createFromParcel(Parcel in) {
+			return new NutritionInfo(in);
+		}
+
+		@Override
+		public NutritionInfo[] newArray(int size) {
+			return new NutritionInfo[size];
+		}
+	};
 
 	/**
 	 * Create a new NutritionInfo object with randomly assigned attributes.
@@ -415,5 +457,46 @@ public class NutritionInfo {
 
 	public void setPotassium(int potassium) {
 		this.potassium = potassium;
+	}
+
+	/**
+	 * Describe the kinds of special objects contained in this Parcelable instance's marshaled
+	 * representation. For example, if the object will include a file descriptor in the output of
+	 * {@link #writeToParcel(Parcel, int)}, the return value of this method must include the {@link
+	 * #CONTENTS_FILE_DESCRIPTOR} bit.
+	 *
+	 * @return a bitmask indicating the set of special object types marshaled by this Parcelable
+	 * object instance.
+	 */
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	/**
+	 * Flatten this object in to a Parcel.
+	 *
+	 * @param dest  The Parcel in which the object should be written.
+	 * @param flags Additional flags about how the object should be written. May be 0 or {@link
+	 *              #PARCELABLE_WRITE_RETURN_VALUE}.
+	 */
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(calories);
+		dest.writeInt(fatCalories);
+		dest.writeInt(totalFat);
+		dest.writeInt(saturatedFat);
+		dest.writeInt(transFat);
+		dest.writeInt(cholesterol);
+		dest.writeInt(sodium);
+		dest.writeInt(totalCarbs);
+		dest.writeInt(dietaryFiber);
+		dest.writeInt(totalSugars);
+		dest.writeInt(addedSugars);
+		dest.writeInt(protein);
+		dest.writeInt(vitaminD);
+		dest.writeInt(calcium);
+		dest.writeInt(iron);
+		dest.writeInt(potassium);
 	}
 }
