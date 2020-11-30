@@ -1,9 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <Switch
+        android:id="@+id/myswitch"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_marginTop="8dp"
+        android:text="Night Mode"
+        android:textColor="?attr/textcolor" />
+
 
     <FrameLayout
         android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </LinearLayout>
