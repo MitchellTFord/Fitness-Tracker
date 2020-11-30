@@ -10,4 +10,13 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Notifications">
+
+        <Preference
+            app:key="send_test_notification"
+            app:summary="Send a notification to test it's functionality"
+            app:title="Send Test Notification" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
