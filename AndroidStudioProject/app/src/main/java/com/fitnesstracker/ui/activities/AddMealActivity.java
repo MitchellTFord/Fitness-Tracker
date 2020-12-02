@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,8 +37,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * An activity for adding {@link FoodDiaryEntry} objects to the database and
- * editing existing ones.
+ * An activity for adding {@link FoodDiaryEntry} objects to the database and editing existing ones.
  * <p>
  * A new {@link FoodDiaryEntry} object can be created by starting this activity with no extras.
  * <p>
@@ -275,12 +275,21 @@ public class AddMealActivity extends AppCompatActivity {
 			calendar.add(Calendar.DATE, 1);
 		}
 
-		// TODO: make it so tapping the notification opens this activity
+		// Create an intent for opening this activity when the user presses the notification
+		Intent addMealIntent = new Intent(this, AddMealActivity.class);
+
+		// Set up the back stack so that the back button doesn't close the app
+		TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+		taskStackBuilder.addNextIntentWithParentStack(addMealIntent);
+
+		PendingIntent addMealPendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
 		// Create a notification
 		Notification notification = new Notification.Builder(this, Application.REMINDER_CHANNEL_ID)
 				.setSmallIcon(R.mipmap.ic_launcher_round)
 				.setContentTitle("Fitness Tracker Daily Reminder")
 				.setContentText("It looks like you haven't logged any meals today.")
+				.setContentIntent(addMealPendingIntent)
 				.setAutoCancel(true)
 				.build();
 
