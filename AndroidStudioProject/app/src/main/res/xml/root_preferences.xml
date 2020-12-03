@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory app:title="@string/database_header">
 
@@ -7,6 +8,15 @@
             app:key="clear_db"
             app:summary="@string/clear_db_summary"
             app:title="@string/clear_db_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Appearance">
+
+        <SwitchPreference
+            app:key="dark_mode"
+            app:title="Dark Mode"
+            app:icon="@drawable/ic_moon" />
 
     </PreferenceCategory>
 

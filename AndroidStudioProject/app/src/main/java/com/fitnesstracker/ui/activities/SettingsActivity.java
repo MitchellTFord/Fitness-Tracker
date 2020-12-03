@@ -15,18 +15,17 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
 
 import com.fitnesstracker.R;
 import com.fitnesstracker.database.FTViewModel;
 
 public class SettingsActivity extends AppCompatActivity {
-	private Switch myswitch;
 
-	@SuppressLint("MissingSuperCall")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.settings_activity);
 		if (savedInstanceState == null) {
 			getSupportFragmentManager()
@@ -34,31 +33,15 @@ public class SettingsActivity extends AppCompatActivity {
 					.replace(R.id.settings, new SettingsFragment())
 					.commit();
 		}
+
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
-		if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-			setTheme(R.style.darktheme);
-		} else setTheme(R.style.AppTheme);
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.settings_activity);
-		myswitch = findViewById(R.id.myswitch);
-		if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-			myswitch.setChecked(true);
-		}
-		myswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked) {
-					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-					restartApp();
-				} else {
-					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-					restartApp();
-				}
-			}
-		});
+
+//		if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+//			setTheme(R.style.darktheme);
+//		} else setTheme(R.style.AppTheme);
 	}
 
 	public void restartApp() {
@@ -75,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
 		public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 			viewModel = ViewModelProviders.of(requireActivity()).get(FTViewModel.class);
 			setPreferencesFromResource(R.xml.root_preferences, rootKey);
+
 			Preference clearDataBase = findPreference("clear_db");
 			clearDataBase.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override public boolean onPreferenceClick(Preference preference) {
@@ -97,6 +81,34 @@ public class SettingsActivity extends AppCompatActivity {
 					return true;
 				}
 			});
+
+			SwitchPreference darkMode = findPreference("dark_mode");
+			darkMode.setChecked(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES);
+			darkMode.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override public boolean onPreferenceClick(Preference preference) {
+					SwitchPreference switchPreference = (SwitchPreference) preference;
+
+					if(switchPreference.isChecked()) {
+						AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+					} else {
+						AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+					}
+
+					return true;
+				}
+			});
+//
+//
+//				@Override
+//				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//					if (isChecked) {
+//						AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//						restartApp();
+//					} else {
+//						AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//						restartApp();
+//					}
+//				}
 		}
 	}
 }
