@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 
 import java.util.Random;
 
@@ -43,7 +44,8 @@ public class Food {
 	private NutritionInfo nutritionInfo;
 
 	/**
-	 * Constructor that specifies a name and assigns a random ID.
+	 * Constructor that specifies a name, serving unit, and serving size, and assigns a random ID
+	 * and a default nutrition info.
 	 * <p>
 	 * Creates a {@link NutritionInfo} object with default fields.
 	 *
@@ -51,6 +53,7 @@ public class Food {
 	 * @param servingUnit the serving unit for this food
 	 * @param servingSize the serving size for this food
 	 */
+	@Ignore
 	public Food(@NonNull String name, @NonNull String servingUnit, @NonNull Double servingSize) {
 		this.setId(new Random().nextLong());
 		this.setName(name);
@@ -59,6 +62,23 @@ public class Food {
 
 		// Create a default NutritionInfo object
 		this.setNutritionInfo(new NutritionInfo());
+	}
+
+	/**
+	 * Constructor that specifies a name, serving unit, serving size, and nutrition info, and
+	 * assigns a random ID.
+	 *
+	 * @param name          the name of this food
+	 * @param servingUnit   the serving unit for this food
+	 * @param servingSize   the serving size for this food
+	 * @param nutritionInfo a NutritionInfo object describing one serving of this food
+	 */
+	public Food(@NonNull String name, @NonNull String servingUnit, @NonNull Double servingSize, @NonNull NutritionInfo nutritionInfo) {
+		this.setId(new Random().nextLong());
+		this.setName(name);
+		this.setServingUnit(servingUnit);
+		this.setServingSize(servingSize);
+		this.setNutritionInfo(nutritionInfo);
 	}
 
 	/**
