@@ -323,9 +323,19 @@ public class Food {
 		 * @return the new object
 		 */
 		public static NutritionInfo makeRandom() {
-			NutritionInfo nutritionInfo = new NutritionInfo();
-			Random random = new Random();
+			return makeRandom(0);
+		}
 
+		/**
+		 * Create a new NutritionInfo object with randomly assigned attributes.
+		 *
+		 * @param seed seed for the random number generator
+		 *
+		 * @return the new object
+		 */
+		public static NutritionInfo makeRandom(long seed) {
+			NutritionInfo nutritionInfo = new NutritionInfo();
+			Random random = new Random(seed);
 			nutritionInfo.calories = random.nextInt(1000);
 			nutritionInfo.fatCalories = random.nextInt(1000);
 			nutritionInfo.totalFat = random.nextInt(500);

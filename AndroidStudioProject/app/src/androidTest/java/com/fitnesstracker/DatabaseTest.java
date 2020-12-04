@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * JUnit test class for ensuring basic functionality of {@link FTDatabase}, {@link FTDao}, and their

@@ -3,20 +3,15 @@ package com.fitnesstracker;
 import com.fitnesstracker.database.daos.FoodDao;
 import com.fitnesstracker.database.entities.Food;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class FoodDatabaseTest extends DatabaseTest {
@@ -26,11 +21,11 @@ public class FoodDatabaseTest extends DatabaseTest {
 	private static final Comparator<Food> COMP_ID = (o1, o2) -> (int) Math.signum(o1.getId() - o2.getId());
 
 	private static final List<Food> FOODS = Arrays.asList(
-			new Food("testName0", "testUnit0", 0d),
-			new Food("testName0", "testUnit1", 1d),
-			new Food("testName1", "testUnit2", 2d),
-			new Food("testName1", "testUnit3", 3d),
-			new Food("testName2", "testUnit4", 4d)
+			new Food("testName0", "testUnit0", 0d, Food.NutritionInfo.makeRandom(0)),
+			new Food("testName0", "testUnit1", 1d, Food.NutritionInfo.makeRandom(1)),
+			new Food("testName1", "testUnit2", 2d, Food.NutritionInfo.makeRandom(2)),
+			new Food("testName1", "testUnit3", 3d, Food.NutritionInfo.makeRandom(3)),
+			new Food("testName2", "testUnit4", 4d, Food.NutritionInfo.makeRandom(4))
 	);
 	static {
 		FOODS.sort(COMP_ID);
