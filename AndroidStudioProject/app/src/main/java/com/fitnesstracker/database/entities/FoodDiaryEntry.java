@@ -7,6 +7,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -95,6 +96,21 @@ public class FoodDiaryEntry {
 	@Ignore
 	public FoodDiaryEntry(Food food, double numServings, long time) {
 		this(generateId(), food.getId(), numServings, time);
+	}
+
+	public static FoodDiaryEntry makeRandom(List<Food> foods) {
+		return makeRandom(0, foods);
+	}
+
+	public static FoodDiaryEntry makeRandom(long seed, List<Food> foods) {
+		Random rand = new Random(seed);
+
+		return new FoodDiaryEntry(
+			rand.nextLong(),
+			foods.get(rand.nextInt(foods.size())).getId(),
+			rand.nextInt(100),
+			Math.abs(rand.nextLong())
+		);
 	}
 
 	/**

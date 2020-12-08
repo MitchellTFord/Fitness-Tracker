@@ -7,6 +7,8 @@ import androidx.room.Update;
 
 import com.fitnesstracker.database.FTDatabase;
 
+import java.util.Collection;
+
 /**
  * A generic data access object to be used with {@link FTDatabase}.
  *
@@ -19,11 +21,17 @@ public abstract class FTDao<T> {
 	 * Insert one or more objects into the database.
 	 *
 	 * @param items one or more items to insert
-	 *
-	 * @return the number of items that were inserted
 	 */
 	@Insert
 	public abstract void insert(T... items);
+
+	/**
+	 * Insert one or more objects into the database.
+	 *
+	 * @param items one or more items to insert
+	 */
+	@Insert
+	public abstract void insert(Collection<T> items);
 
 	/**
 	 * Update one or more items in the database.

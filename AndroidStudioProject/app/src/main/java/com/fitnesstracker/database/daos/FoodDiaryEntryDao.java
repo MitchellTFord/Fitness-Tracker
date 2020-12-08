@@ -3,6 +3,7 @@ package com.fitnesstracker.database.daos;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
@@ -138,4 +139,7 @@ public abstract class FoodDiaryEntryDao extends FTDao<FoodDiaryEntry> {
 		}
 		return updates;
 	}
+
+	@Query("DELETE FROM diary_food")
+	public abstract void deleteAll();
 }
