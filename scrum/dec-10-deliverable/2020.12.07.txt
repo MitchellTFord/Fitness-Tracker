@@ -1,0 +1,18 @@
+# Monday, December 7th, 2020
+
+## Member Check In: Mitchell
+### What did they do since last meeting?
+* Worked on the poster
+### What will they do before the next meeting?
+* Will work on the poster and UML diagrams
+### What obstactles are impeding their progess?
+* Need someone to review my PR
+
+## Member Check In: Eyerusalemm
+### What did they do since last meeting?
+* Worked on dark mode
+### What will they do before the next meeting?
+* Will work more on dark mode
+* Might have dark mode complete
+### What obstactles are impeding their progess?
+* None at the moment

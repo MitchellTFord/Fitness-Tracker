@@ -1,0 +1,18 @@
+# Tuesday, December 8th, 2020
+
+## Member Check In: Mitchell
+### What did they do since last meeting?
+* Wrote some database unit tests and worked on the poster
+### What will they do before the next meeting?
+* Will work on the poster and UML diagrams
+### What obstactles are impeding their progess?
+* None at the moment
+
+## Member Check In: Eyerusalemm
+### What did they do since last meeting?
+* Worked on dark mode and the poster
+### What will they do before the next meeting?
+* Will have significant work done on the poster
+* Might have dark mode complete
+### What obstactles are impeding their progess?
+* None at the moment

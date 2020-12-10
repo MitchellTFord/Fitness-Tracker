@@ -1,0 +1,19 @@
+# Wednesday, December 9th, 2020
+
+## Member Check In: Mitchell
+### What did they do since last meeting?
+* Worked on my parts of the poster and my assigned UML diagrams
+### What will they do before the next meeting?
+* Complete my parts of the poster and my assigned UML diagrams
+### What obstactles are impeding their progess?
+* None at the moment
+
+## Member Check In: Eyerusalemm
+### What did they do since last meeting?
+* Worked on my parts of the poster and my assigned UML diagrams
+* Worked on implementing dark mode
+### What will they do before the next meeting?
+* Complete my parts of the poster and my assigned UML diagrams
+* Might have dark mode complete
+### What obstactles are impeding their progess?
+* Strugged to get dark mode implemented
